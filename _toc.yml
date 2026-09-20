@@ -1,0 +1,11 @@
+format: jb-book
+root: intro
+
+parts:
+  - caption: Elective 4
+    chapters:
+      - file: Marls jupyterbook
+
+  - caption: Personal Projects
+    chapters:
+      - file: student_analysis

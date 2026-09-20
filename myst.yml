@@ -1,0 +1,9 @@
+version: 1
+
+project:
+  title: "Introduction"
+  authors:
+    - name: Marlou Apuya
+
+site:
+  template: book-theme
