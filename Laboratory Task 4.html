@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -656,54 +656,10 @@ First 5 targets: [ 7.393262   -2.9295554  -4.6098742  -0.33689597  0.8883459 ]
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch [800/1000] Loss: 0.2643
 </pre></div>
 </div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Cell</span> <span class="n">In</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">line</span> <span class="mi">18</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span>             <span class="n">preds</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">15</span>             <span class="n">yb</span>
-<span class="g g-Whitespace">     </span><span class="mi">16</span>         <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span> 
-<span class="ne">---&gt; </span><span class="mi">18</span>         <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">19</span> 
-<span class="g g-Whitespace">     </span><span class="mi">20</span>         <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">21</span> 
-
-<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\_tensor.py:623,</span> in <span class="ni">Tensor.backward</span><span class="nt">(self, gradient, retain_graph, create_graph, inputs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">613</span> <span class="k">if</span> <span class="n">has_torch_function_unary</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">614</span>     <span class="k">return</span> <span class="n">handle_torch_function</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">615</span>         <span class="n">Tensor</span><span class="o">.</span><span class="n">backward</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">616</span>         <span class="p">(</span><span class="bp">self</span><span class="p">,),</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>    <span class="mi">621</span>         <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">622</span>     <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">623</span> <span class="n">torch</span><span class="o">.</span><span class="n">autograd</span><span class="o">.</span><span class="n">backward</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">624</span>     <span class="bp">self</span><span class="p">,</span> <span class="n">gradient</span><span class="p">,</span> <span class="n">retain_graph</span><span class="p">,</span> <span class="n">create_graph</span><span class="p">,</span> <span class="n">inputs</span><span class="o">=</span><span class="n">inputs</span>
-<span class="g g-Whitespace">    </span><span class="mi">625</span> <span class="p">)</span>
-
-<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\autograd\__init__.py:395,</span> in <span class="ni">backward</span><span class="nt">(tensors, grad_tensors, retain_graph, create_graph, grad_variables, inputs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">390</span>     <span class="n">retain_graph</span> <span class="o">=</span> <span class="n">create_graph</span>
-<span class="g g-Whitespace">    </span><span class="mi">392</span> <span class="c1"># The reason we repeat the same comment below is that</span>
-<span class="g g-Whitespace">    </span><span class="mi">393</span> <span class="c1"># some Python versions print out the first line of a multi-line function</span>
-<span class="g g-Whitespace">    </span><span class="mi">394</span> <span class="c1"># calls in the traceback and some print out the last line</span>
-<span class="ne">--&gt; </span><span class="mi">395</span> <span class="n">_engine_run_backward</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">396</span>     <span class="n">tensors</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">397</span>     <span class="n">grad_tensors_</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">398</span>     <span class="n">retain_graph</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">399</span>     <span class="n">create_graph</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">400</span>     <span class="n">inputs_tuple</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">401</span>     <span class="n">allow_unreachable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">402</span>     <span class="n">accumulate_grad</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">403</span> <span class="p">)</span>
-
-<span class="nn">File ~\AppData\Local\Programs\Python\Python313\Lib\site-packages\torch\autograd\graph.py:1072,</span> in <span class="ni">_engine_run_backward</span><span class="nt">(t_outputs, *args, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1069</span> <span class="n">torch</span><span class="o">.</span><span class="n">_C</span><span class="o">.</span><span class="n">_stash_obj_in_tls</span><span class="p">(</span><span class="s2">"context"</span><span class="p">,</span> <span class="n">contextvars</span><span class="o">.</span><span class="n">copy_context</span><span class="p">())</span>
-<span class="g g-Whitespace">   </span><span class="mi">1071</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1072</span>     <span class="k">return</span> <span class="n">Variable</span><span class="o">.</span><span class="n">_execution_engine</span><span class="o">.</span><span class="n">run_backward</span><span class="p">(</span>  <span class="c1"># Calls into the C++ engine to run the backward pass</span>
-<span class="g g-Whitespace">   </span><span class="mi">1073</span>         <span class="n">t_outputs</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-<span class="g g-Whitespace">   </span><span class="mi">1074</span>     <span class="p">)</span>  <span class="c1"># Calls into the C++ engine to run the backward pass</span>
-<span class="g g-Whitespace">   </span><span class="mi">1075</span> <span class="k">finally</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1076</span>     <span class="k">if</span> <span class="n">attach_logging_hooks</span><span class="p">:</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch [900/1000] Loss: 0.2656
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch [1000/1000] Loss: 0.2668
 </pre></div>
 </div>
 </div>
@@ -824,6 +780,7 @@ By Marlou Apuya
     
 <div class="extra_footer">
   <p>© 2026 Marlou Apuya, Data Science Portfolio.</p>
+
 </div>
   </div>
   
