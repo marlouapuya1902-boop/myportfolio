@@ -13,16 +13,9 @@ This portfolio was created using **Jupyter Book** and is designed to showcase my
 The repository currently contains:
 
 * `intro.md` — Portfolio homepage
-* `project1.ipynb` — First Data Science project
 * `_toc.yml` — Jupyter Book table of contents
 * `_config.yml` — Jupyter Book configuration
 * `README.md` — Repository information
-
-## 📝 Project 1
-
-**Project 1** is my first Data Science notebook. It demonstrates the use of Python and Data Science tools for working with data, performing analysis, and creating visualizations.
-
-More projects will be added as I progress through the course.
 
 ## 🛠️ Tools and Technologies
 
