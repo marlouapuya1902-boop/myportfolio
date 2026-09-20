@@ -4,7 +4,11 @@ root: intro
 parts:
   - caption: Elective 4
     chapters:
-      - file: Marls jupyterbook
+      - file: Laboratory Task 2
+      - file: Laboratory Task 3
+      - file: Laboratory Task 4
+      - file: Laboratory Task 5
+      - file: Laboratory Task 6
 
   - caption: Personal Projects
     chapters:
