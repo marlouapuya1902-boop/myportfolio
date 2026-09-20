@@ -3,6 +3,7 @@ author: "Marlou Apuya"
 
 execute:
   execute_notebooks: auto
+  timeout: 120
 
 html:
   extra_footer: |
