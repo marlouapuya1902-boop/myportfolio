@@ -9,6 +9,7 @@ parts:
       - file: Laboratory Task 4
       - file: Laboratory Task 5
       - file: Laboratory Task 6
+      - file: Laboratory_Exercise_Image_Classification
 
   - caption: Personal Projects
     chapters:

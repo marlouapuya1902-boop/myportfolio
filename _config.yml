@@ -2,7 +2,7 @@ title: "My Data Science Portfolio"
 author: "Marlou Apuya"
 
 execute:
-  execute_notebooks: auto
+  execute_notebooks: "off"
   timeout: 120
 
 html:
