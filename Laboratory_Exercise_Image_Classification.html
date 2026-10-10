@@ -1,0 +1,1462 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Laboratory Exercise (Model Inference on Custom Dataset) &#8212; My Data Science Portfolio</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Laboratory_Exercise_Image_Classification';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Student Performance Analysis" href="student_analysis.html" />
+    <link rel="prev" title="Laboratory Task 6" href="Laboratory%20Task%206.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">My Data Science Portfolio</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Elective 4</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%202.html">Laboratory Task 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%203.html">Laboratory Task 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%204.html">Laboratory Task 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%205.html">Laboratory Task 5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%206.html">Laboratory Task 6</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Laboratory Exercise (Model Inference on Custom Dataset)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Personal Projects</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="student_analysis.html">Student Performance Analysis</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Laboratory_Exercise_Image_Classification.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Laboratory Exercise (Model Inference on Custom Dataset)</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-choose-and-understand-the-dataset">Step 1 — Choose and understand the dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-install-and-import-the-libraries">Step 2 — Install and import the libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-download-and-inspect-the-dataset">Step 3 — Download and inspect the dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-create-a-custom-pytorch-dataset-class">Step 4 — Create a custom PyTorch Dataset class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-split-the-training-data">Step 5 — Split the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-create-dataloaders">Step 6 — Create DataLoaders</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-7-load-the-five-pre-trained-models">Step 7 — Load the five pre-trained models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-8-define-the-training-and-validation-functions">Step 8 — Define the training and validation functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-9-evaluate-the-five-models">Step 9 — Evaluate the five models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-10-display-the-model-comparison-table">Step 10 — Display the model comparison table</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-11-visualize-the-results">Step 11 — Visualize the results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-12-generate-a-confusion-matrix">Step 12 — Generate a confusion matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-13-analysis-of-results">Step 13 — Analysis of Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-performance-vgg16-achieved-the-highest-accuracy-of-99-59-and-the-highest-f1-score-of-99-70-this-indicates-that-it-provided-the-strongest-overall-balance-of-classification-performance-among-the-five-evaluated-models">1. Overall performance: VGG16 achieved the highest accuracy of 99.59% and the highest F1-score of 99.70%. This indicates that it provided the strongest overall balance of classification performance among the five evaluated models.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precision-and-recall-resnet50-achieved-the-highest-recall-of-99-96-meaning-it-identified-nearly-all-actual-dog-images-vgg16-achieved-99-60-precision-and-99-80-recall-showing-that-it-performed-consistently-well-across-the-selected-metrics">2. Precision and recall: ResNet50 achieved the highest recall of 99.96%, meaning it identified nearly all actual dog images. VGG16 achieved 99.60% precision and 99.80% recall, showing that it performed consistently well across the selected metrics.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-comparison-densenet121-achieved-99-02-accuracy-and-a-99-28-f1-score-placing-it-close-to-resnet50-mobilenetv3-large-achieved-98-06-accuracy-while-efficientnet-b0-achieved-96-65-although-all-five-models-performed-well-their-results-differed-under-the-same-experimental-setup">3. Model comparison: DenseNet121 achieved 99.02% accuracy and a 99.28% F1-score, placing it close to ResNet50. MobileNetV3-Large achieved 98.06% accuracy, while EfficientNet-B0 achieved 96.65%. Although all five models performed well, their results differed under the same experimental setup.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-efficiency-efficientnet-b0-had-the-shortest-training-time-at-57-7-seconds-while-vgg16-took-72-0-seconds-this-demonstrates-a-trade-off-between-computational-time-and-classification-performance-in-this-experiment-vgg16-took-longer-but-achieved-the-best-accuracy-and-f1-score">4. Training efficiency: EfficientNet-B0 had the shortest training time at 57.7 seconds, while VGG16 took 72.0 seconds. This demonstrates a trade-off between computational time and classification performance in this experiment. VGG16 took longer but achieved the best accuracy and F1-score.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-architecture-the-differences-may-be-related-to-each-architecture-s-feature-extraction-design-complexity-and-suitability-for-this-dataset-the-models-used-pre-trained-imagenet-weights-with-only-their-final-classification-layers-trained-for-the-cat-versus-dog-task">5. Model architecture: The differences may be related to each architecture’s feature extraction design, complexity, and suitability for this dataset. The models used pre-trained ImageNet weights, with only their final classification layers trained for the cat-versus-dog task.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations-these-results-reflect-the-selected-dataset-preprocessing-random-split-and-three-training-epochs-the-results-do-not-establish-that-vgg16-will-always-outperform-the-other-models-on-different-datasets-or-unfamiliar-real-world-images">6. Limitations: These results reflect the selected dataset, preprocessing, random split, and three training epochs. The results do not establish that VGG16 will always outperform the other models on different datasets or unfamiliar real-world images.</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-14-conclusion">Step 14 — Conclusion</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#this-laboratory-exercise-evaluated-five-pre-trained-convolutional-neural-networks-for-cat-versus-dog-image-classification-using-transfer-learning-a-custom-pytorch-dataset-class-and-dataloaders-were-implemented-to-load-and-process-images-in-batches-the-models-were-compared-using-accuracy-precision-recall-f1-score-test-loss-and-training-time">This laboratory exercise evaluated five pre-trained convolutional neural networks for cat-versus-dog image classification using transfer learning. A custom PyTorch Dataset class and DataLoaders were implemented to load and process images in batches. The models were compared using accuracy, precision, recall, F1-score, test loss, and training time.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#among-the-evaluated-models-vgg16-achieved-the-best-overall-performance-with-99-59-accuracy-and-a-99-70-f1-score-resnet50-achieved-the-highest-recall-at-99-96-while-efficientnet-b0-completed-training-in-the-shortest-time-at-57-7-seconds-these-results-illustrate-that-different-model-architectures-can-offer-different-balances-between-classification-performance-and-computational-efficiency-overall-the-activity-demonstrated-how-transfer-learning-and-appropriate-evaluation-metrics-can-be-used-to-compare-pre-trained-models-for-image-classification">Among the evaluated models, VGG16 achieved the best overall performance, with 99.59% accuracy and a 99.70% F1-score. ResNet50 achieved the highest recall at 99.96%, while EfficientNet-B0 completed training in the shortest time at 57.7 seconds. These results illustrate that different model architectures can offer different balances between classification performance and computational efficiency. Overall, the activity demonstrated how transfer learning and appropriate evaluation metrics can be used to compare pre-trained models for image classification.</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="laboratory-exercise-model-inference-on-custom-dataset">
+<h1>Laboratory Exercise (Model Inference on Custom Dataset)<a class="headerlink" href="#laboratory-exercise-model-inference-on-custom-dataset" title="Link to this heading">#</a></h1>
+<section id="step-1-choose-and-understand-the-dataset">
+<h2>Step 1 — Choose and understand the dataset<a class="headerlink" href="#step-1-choose-and-understand-the-dataset" title="Link to this heading">#</a></h2>
+<p>I recommend the Oxford-IIIT Pet Dataset, available through torchvision. It contains images of cats and dogs, so we can automatically download the data instead of manually collecting and sorting hundreds of images. We’ll use its binary cat-versus-dog labels.</p>
+</section>
+<section id="step-2-install-and-import-the-libraries">
+<h2>Step 2 — Install and import the libraries<a class="headerlink" href="#step-2-install-and-import-the-libraries" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">q</span> <span class="n">torch</span> <span class="n">torchvision</span> <span class="n">scikit</span><span class="o">-</span><span class="n">learn</span> <span class="n">pandas</span> <span class="n">matplotlib</span> <span class="n">seaborn</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">random_split</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">transforms</span><span class="p">,</span> <span class="n">models</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.metrics</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">accuracy_score</span><span class="p">,</span>
+    <span class="n">precision_score</span><span class="p">,</span>
+    <span class="n">recall_score</span><span class="p">,</span>
+    <span class="n">f1_score</span><span class="p">,</span>
+    <span class="n">classification_report</span><span class="p">,</span>
+    <span class="n">confusion_matrix</span>
+<span class="p">)</span>
+
+<span class="n">SEED</span> <span class="o">=</span> <span class="mi">42</span>
+<span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">manual_seed_all</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+
+<span class="n">device</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"cuda"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Using device:"</span><span class="p">,</span> <span class="n">device</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"PyTorch version:"</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Using device: cuda
+PyTorch version: 2.11.0+cu130
+</pre></div>
+</div>
+</div>
+</div>
+<p>This cell imports the libraries and sets a random seed to help make the experiment reproducible. A GPU is helpful because we’ll train five models.</p>
+</section>
+<section id="step-3-download-and-inspect-the-dataset">
+<h2>Step 3 — Download and inspect the dataset<a class="headerlink" href="#step-3-download-and-inspect-the-dataset" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">data_root</span> <span class="o">=</span> <span class="s2">"./data"</span>
+
+<span class="n">trainval_base</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">OxfordIIITPet</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="n">data_root</span><span class="p">,</span>
+    <span class="n">split</span><span class="o">=</span><span class="s2">"trainval"</span><span class="p">,</span>
+    <span class="n">target_types</span><span class="o">=</span><span class="s2">"binary-category"</span><span class="p">,</span>
+    <span class="n">download</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="n">test_base</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">OxfordIIITPet</span><span class="p">(</span>
+    <span class="n">root</span><span class="o">=</span><span class="n">data_root</span><span class="p">,</span>
+    <span class="n">split</span><span class="o">=</span><span class="s2">"test"</span><span class="p">,</span>
+    <span class="n">target_types</span><span class="o">=</span><span class="s2">"binary-category"</span><span class="p">,</span>
+    <span class="n">download</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Training/validation images:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainval_base</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Testing images:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_base</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 792M/792M [00:37&lt;00:00, 20.9MB/s]
+100%|██████████| 19.2M/19.2M [00:02&lt;00:00, 9.50MB/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training/validation images: 3680
+Testing images: 3669
+</pre></div>
+</div>
+</div>
+</div>
+<p>The official dataset provides separate trainval and test splits. We’ll divide trainval into training and validation subsets, while keeping the test data separate until final evaluation.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">image</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="n">trainval_base</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Image type:"</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">image</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Image size:"</span><span class="p">,</span> <span class="n">image</span><span class="o">.</span><span class="n">size</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Original binary label:"</span><span class="p">,</span> <span class="n">label</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Dataset sample — label </span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Image type: &lt;class 'PIL.Image.Image'&gt;
+Image size: (394, 500)
+Original binary label: 0
+</pre></div>
+</div>
+<img alt="_images/88e1b97117dd01c705da69b4af66718c793535d974ff4279604095956449a2a8.png" src="_images/88e1b97117dd01c705da69b4af66718c793535d974ff4279604095956449a2a8.png" />
+</div>
+</div>
+<p>The original binary labels are typically 1 for cats and 2 for dogs in torchvision’s implementation. We’ll convert them to 0 and 1 in our custom dataset so the model outputs correspond to cat and dog.</p>
+</section>
+<section id="step-4-create-a-custom-pytorch-dataset-class">
+<h2>Step 4 — Create a custom PyTorch Dataset class<a class="headerlink" href="#step-4-create-a-custom-pytorch-dataset-class" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">CustomDataset</span><span class="p">(</span><span class="n">Dataset</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span> <span class="o">=</span> <span class="n">dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">idx</span><span class="p">):</span>
+        <span class="n">image</span><span class="p">,</span> <span class="n">label</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+        <span class="c1"># Keep the existing binary labels: 0 = cat, 1 = dog</span>
+        <span class="n">label</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">:</span>
+            <span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">image</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">image</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">long</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<ul class="simple">
+<li><p><strong>init</strong>() stores the underlying dataset and any image transformations.</p></li>
+<li><p><strong>getitem</strong>() loads an image and its label, transforms the image, and returns the image tensor and numeric label.</p></li>
+<li><p><strong>len</strong>() returns the total number of images.</p></li>
+<li><p>Labels become 0 = cat and 1 = dog.</p></li>
+</ul>
+</section>
+<section id="step-5-split-the-training-data">
+<h2>Step 5 — Split the training data<a class="headerlink" href="#step-5-split-the-training-data" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">train_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="mf">0.8</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainval_base</span><span class="p">))</span>
+<span class="n">val_size</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">trainval_base</span><span class="p">)</span> <span class="o">-</span> <span class="n">train_size</span>
+
+<span class="n">train_subset</span><span class="p">,</span> <span class="n">val_subset</span> <span class="o">=</span> <span class="n">random_split</span><span class="p">(</span>
+    <span class="n">trainval_base</span><span class="p">,</span>
+    <span class="p">[</span><span class="n">train_size</span><span class="p">,</span> <span class="n">val_size</span><span class="p">],</span>
+    <span class="n">generator</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">()</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Training samples:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_subset</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Validation samples:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">val_subset</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Test samples:"</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">test_base</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Training samples: 2944
+Validation samples: 736
+Test samples: 3669
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’ll use 80% of the training/validation split for training and 20% for validation. The separate test set will be used for the final model comparison.</p>
+</section>
+<section id="step-6-create-dataloaders">
+<h2>Step 6 — Create DataLoaders<a class="headerlink" href="#step-6-create-dataloaders" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">make_transforms</span><span class="p">(</span><span class="n">weights</span><span class="p">):</span>
+    <span class="n">preprocess</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">transforms</span><span class="p">()</span>
+
+    <span class="n">size</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">crop_size</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+        <span class="n">size</span> <span class="o">=</span> <span class="n">size</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">mean</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="n">preprocess</span><span class="o">.</span><span class="n">std</span>
+
+    <span class="n">train_transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span>
+        <span class="n">transforms</span><span class="o">.</span><span class="n">Resize</span><span class="p">((</span><span class="n">size</span><span class="p">,</span> <span class="n">size</span><span class="p">)),</span>
+        <span class="n">transforms</span><span class="o">.</span><span class="n">RandomHorizontalFlip</span><span class="p">(),</span>
+        <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span>
+        <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">mean</span><span class="o">=</span><span class="n">mean</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">std</span><span class="p">)</span>
+    <span class="p">])</span>
+
+    <span class="n">eval_transform</span> <span class="o">=</span> <span class="n">preprocess</span>
+
+    <span class="k">return</span> <span class="n">train_transform</span><span class="p">,</span> <span class="n">eval_transform</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">make_loaders</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">):</span>
+    <span class="n">train_transform</span><span class="p">,</span> <span class="n">eval_transform</span> <span class="o">=</span> <span class="n">make_transforms</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+    <span class="n">train_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span>
+        <span class="n">train_subset</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">train_transform</span>
+    <span class="p">)</span>
+    <span class="n">val_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span>
+        <span class="n">val_subset</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">eval_transform</span>
+    <span class="p">)</span>
+    <span class="n">test_dataset</span> <span class="o">=</span> <span class="n">CustomDataset</span><span class="p">(</span>
+        <span class="n">test_base</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">eval_transform</span>
+    <span class="p">)</span>
+
+    <span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">()</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">SEED</span><span class="p">)</span>
+
+    <span class="n">train_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+        <span class="n">train_dataset</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">pin_memory</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">(),</span>
+        <span class="n">generator</span><span class="o">=</span><span class="n">generator</span>
+    <span class="p">)</span>
+
+    <span class="n">val_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+        <span class="n">val_dataset</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">pin_memory</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="n">test_loader</span> <span class="o">=</span> <span class="n">DataLoader</span><span class="p">(</span>
+        <span class="n">test_dataset</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">num_workers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">pin_memory</span><span class="o">=</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">test_loader</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">weights</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ResNet50_Weights</span><span class="o">.</span><span class="n">DEFAULT</span>
+
+<span class="n">train_loader</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">test_loader</span> <span class="o">=</span> <span class="n">make_loaders</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+
+<span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">train_loader</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Image batch shape:"</span><span class="p">,</span> <span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Label batch shape:"</span><span class="p">,</span> <span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Labels in batch:"</span><span class="p">,</span> <span class="n">labels</span><span class="p">[:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Image batch shape: torch.Size([32, 3, 224, 224])
+Label batch shape: torch.Size([32])
+Labels in batch: [0, 1, 0, 1, 1, 1, 1, 0, 1, 1]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-7-load-the-five-pre-trained-models">
+<h2>Step 7 — Load the five pre-trained models<a class="headerlink" href="#step-7-load-the-five-pre-trained-models" title="Link to this heading">#</a></h2>
+<p>We will keep the pre-trained feature extractors frozen and train only the final classification layers. This makes the comparison more manageable and reduces training time.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">build_model</span><span class="p">(</span><span class="n">model_name</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"ResNet50"</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">ResNet50_Weights</span><span class="o">.</span><span class="n">DEFAULT</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">resnet50</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">in_features</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fc</span><span class="o">.</span><span class="n">in_features</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">fc</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"MobileNetV3-Large"</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">MobileNet_V3_Large_Weights</span><span class="o">.</span><span class="n">DEFAULT</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">mobilenet_v3_large</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">in_features</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"EfficientNet-B0"</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">EfficientNet_B0_Weights</span><span class="o">.</span><span class="n">DEFAULT</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">efficientnet_b0</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">in_features</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"DenseNet121"</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DenseNet121_Weights</span><span class="o">.</span><span class="n">DEFAULT</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">densenet121</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">in_features</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">in_features</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"VGG16"</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">VGG16_Weights</span><span class="o">.</span><span class="n">DEFAULT</span>
+        <span class="n">model</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">vgg16</span><span class="p">(</span><span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">in_features</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_features</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Unknown model: </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="c1"># Freeze the pre-trained feature extractor</span>
+    <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+        <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># Train only the newly replaced classification layer</span>
+    <span class="k">if</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"ResNet50"</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">fc</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"MobileNetV3-Large"</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"EfficientNet-B0"</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"DenseNet121"</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">elif</span> <span class="n">model_name</span> <span class="o">==</span> <span class="s2">"VGG16"</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">classifier</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span><span class="o">.</span><span class="n">parameters</span><span class="p">():</span>
+            <span class="n">param</span><span class="o">.</span><span class="n">requires_grad</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">weights</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">build_model</span><span class="p">(</span><span class="s2">"ResNet50"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Trainable parameters:"</span><span class="p">,</span>
+      <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+          <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Downloading: "https://download.pytorch.org/models/resnet50-11ad3fa6.pth" to /root/.cache/torch/hub/checkpoints/resnet50-11ad3fa6.pth
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 97.8M/97.8M [00:00&lt;00:00, 211MB/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>ResNet
+Trainable parameters: 4098
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-8-define-the-training-and-validation-functions">
+<h2>Step 8 — Define the training and validation functions<a class="headerlink" href="#step-8-define-the-training-and-validation-functions" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">run_epoch</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">loader</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">is_training</span> <span class="o">=</span> <span class="n">optimizer</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span> <span class="k">if</span> <span class="n">is_training</span> <span class="k">else</span> <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+
+    <span class="n">total_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">all_preds</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">all_labels</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">set_grad_enabled</span><span class="p">(</span><span class="n">is_training</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">loader</span><span class="p">:</span>
+            <span class="n">images</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">labels</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">is_training</span><span class="p">:</span>
+                <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+
+            <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">criterion</span><span class="p">(</span><span class="n">outputs</span><span class="p">,</span> <span class="n">labels</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">is_training</span><span class="p">:</span>
+                <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+                <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+            <span class="n">total_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">*</span> <span class="n">labels</span><span class="o">.</span><span class="n">size</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+            <span class="n">preds</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">all_preds</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">preds</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+            <span class="n">all_labels</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+    <span class="n">avg_loss</span> <span class="o">=</span> <span class="n">total_loss</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">loader</span><span class="o">.</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">all_labels</span><span class="p">,</span> <span class="n">all_preds</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">avg_loss</span><span class="p">,</span> <span class="n">accuracy</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">train_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">3</span><span class="p">):</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">],</span>
+        <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span>
+    <span class="p">)</span>
+
+    <span class="n">best_val_accuracy</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">best_state</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">())</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
+        <span class="n">train_loss</span><span class="p">,</span> <span class="n">train_acc</span> <span class="o">=</span> <span class="n">run_epoch</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">criterion</span><span class="p">,</span> <span class="n">optimizer</span>
+        <span class="p">)</span>
+
+        <span class="n">val_loss</span><span class="p">,</span> <span class="n">val_acc</span> <span class="o">=</span> <span class="n">run_epoch</span><span class="p">(</span>
+            <span class="n">model</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">criterion</span>
+        <span class="p">)</span>
+
+        <span class="n">history</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">"epoch"</span><span class="p">:</span> <span class="n">epoch</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">"train_loss"</span><span class="p">:</span> <span class="n">train_loss</span><span class="p">,</span>
+            <span class="s2">"train_accuracy"</span><span class="p">:</span> <span class="n">train_acc</span><span class="p">,</span>
+            <span class="s2">"val_loss"</span><span class="p">:</span> <span class="n">val_loss</span><span class="p">,</span>
+            <span class="s2">"val_accuracy"</span><span class="p">:</span> <span class="n">val_acc</span>
+        <span class="p">})</span>
+
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">epochs</span><span class="si">}</span><span class="s2"> | "</span>
+            <span class="sa">f</span><span class="s2">"Train loss: </span><span class="si">{</span><span class="n">train_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | "</span>
+            <span class="sa">f</span><span class="s2">"Train accuracy: </span><span class="si">{</span><span class="n">train_acc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | "</span>
+            <span class="sa">f</span><span class="s2">"Val loss: </span><span class="si">{</span><span class="n">val_loss</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> | "</span>
+            <span class="sa">f</span><span class="s2">"Val accuracy: </span><span class="si">{</span><span class="n">val_acc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span>
+        <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">val_acc</span> <span class="o">&gt;</span> <span class="n">best_val_accuracy</span><span class="p">:</span>
+            <span class="n">best_val_accuracy</span> <span class="o">=</span> <span class="n">val_acc</span>
+            <span class="n">best_state</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">state_dict</span><span class="p">())</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">load_state_dict</span><span class="p">(</span><span class="n">best_state</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">model</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">history</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The function trains the classification layer, measures performance on the validation set after each epoch, and retains the model state with the best validation accuracy. The test set is not used for choosing the best epoch.</p>
+</section>
+<section id="step-9-evaluate-the-five-models">
+<h2>Step 9 — Evaluate the five models<a class="headerlink" href="#step-9-evaluate-the-five-models" title="Link to this heading">#</a></h2>
+<p>This step may take a while, particularly if you use a CPU. Three epochs per model is a reasonable initial experiment; you can increase the epochs later if needed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model_names</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"ResNet50"</span><span class="p">,</span>
+    <span class="s2">"MobileNetV3-Large"</span><span class="p">,</span>
+    <span class="s2">"EfficientNet-B0"</span><span class="p">,</span>
+    <span class="s2">"DenseNet121"</span><span class="p">,</span>
+    <span class="s2">"VGG16"</span>
+<span class="p">]</span>
+
+<span class="n">trained_models</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">histories</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">test_predictions</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">model_names</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">"</span> <span class="o">+</span> <span class="s2">"="</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Training:"</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"="</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">build_model</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="n">train_loader</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">test_loader</span> <span class="o">=</span> <span class="n">make_loaders</span><span class="p">(</span>
+        <span class="n">weights</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span>
+    <span class="p">)</span>
+
+    <span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+
+    <span class="n">model</span><span class="p">,</span> <span class="n">history</span> <span class="o">=</span> <span class="n">train_model</span><span class="p">(</span>
+        <span class="n">model</span><span class="p">,</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">val_loader</span><span class="p">,</span> <span class="n">epochs</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>
+
+    <span class="n">elapsed</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+
+    <span class="c1"># Final evaluation on the separate test set</span>
+    <span class="n">criterion</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+    <span class="n">test_loss</span><span class="p">,</span> <span class="n">test_accuracy</span> <span class="o">=</span> <span class="n">run_epoch</span><span class="p">(</span>
+        <span class="n">model</span><span class="p">,</span> <span class="n">test_loader</span><span class="p">,</span> <span class="n">criterion</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Collect final predictions for all test images</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">eval</span><span class="p">()</span>
+    <span class="n">y_true</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">y_pred</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">with</span> <span class="n">torch</span><span class="o">.</span><span class="n">no_grad</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="ow">in</span> <span class="n">test_loader</span><span class="p">:</span>
+            <span class="n">images</span> <span class="o">=</span> <span class="n">images</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+            <span class="n">outputs</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">images</span><span class="p">)</span>
+            <span class="n">predictions</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+            <span class="n">y_true</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">labels</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+            <span class="n">y_pred</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">predictions</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+
+    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+        <span class="s2">"Model"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+        <span class="s2">"Accuracy"</span><span class="p">:</span> <span class="n">accuracy_score</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">),</span>
+        <span class="s2">"Precision"</span><span class="p">:</span> <span class="n">precision_score</span><span class="p">(</span>
+            <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">),</span>
+        <span class="s2">"Recall"</span><span class="p">:</span> <span class="n">recall_score</span><span class="p">(</span>
+            <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">),</span>
+        <span class="s2">"F1-score"</span><span class="p">:</span> <span class="n">f1_score</span><span class="p">(</span>
+            <span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">),</span>
+        <span class="s2">"Test Loss"</span><span class="p">:</span> <span class="n">test_loss</span><span class="p">,</span>
+        <span class="s2">"Training Time (seconds)"</span><span class="p">:</span> <span class="n">elapsed</span>
+    <span class="p">})</span>
+
+    <span class="n">trained_models</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span>
+    <span class="n">histories</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">history</span>
+    <span class="n">test_predictions</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">device</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Test accuracy: </span><span class="si">{</span><span class="n">results</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">'Accuracy'</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Elapsed time: </span><span class="si">{</span><span class="n">elapsed</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> seconds"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>============================================================
+Training: ResNet50
+============================================================
+Epoch 1/3 | Train loss: 0.2079 | Train accuracy: 0.9453 | Val loss: 0.0741 | Val accuracy: 0.9959
+Epoch 2/3 | Train loss: 0.0595 | Train accuracy: 0.9888 | Val loss: 0.0436 | Val accuracy: 0.9946
+Epoch 3/3 | Train loss: 0.0363 | Train accuracy: 0.9942 | Val loss: 0.0305 | Val accuracy: 0.9959
+Test accuracy: 0.9905
+Elapsed time: 68.1 seconds
+
+============================================================
+Training: MobileNetV3-Large
+============================================================
+Downloading: "https://download.pytorch.org/models/mobilenet_v3_large-5c1a4163.pth" to /root/.cache/torch/hub/checkpoints/mobilenet_v3_large-5c1a4163.pth
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 21.1M/21.1M [00:00&lt;00:00, 172MB/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/3 | Train loss: 0.2850 | Train accuracy: 0.9147 | Val loss: 0.1404 | Val accuracy: 0.9742
+Epoch 2/3 | Train loss: 0.1305 | Train accuracy: 0.9626 | Val loss: 0.0950 | Val accuracy: 0.9755
+Epoch 3/3 | Train loss: 0.0945 | Train accuracy: 0.9762 | Val loss: 0.0794 | Val accuracy: 0.9769
+Test accuracy: 0.9806
+Elapsed time: 58.6 seconds
+
+============================================================
+Training: EfficientNet-B0
+============================================================
+Downloading: "https://download.pytorch.org/models/efficientnet_b0_rwightman-7f5810bc.pth" to /root/.cache/torch/hub/checkpoints/efficientnet_b0_rwightman-7f5810bc.pth
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 20.5M/20.5M [00:00&lt;00:00, 194MB/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/3 | Train loss: 0.3273 | Train accuracy: 0.8882 | Val loss: 0.1794 | Val accuracy: 0.9606
+Epoch 2/3 | Train loss: 0.1748 | Train accuracy: 0.9453 | Val loss: 0.1227 | Val accuracy: 0.9715
+Epoch 3/3 | Train loss: 0.1365 | Train accuracy: 0.9596 | Val loss: 0.0998 | Val accuracy: 0.9755
+Test accuracy: 0.9665
+Elapsed time: 57.7 seconds
+
+============================================================
+Training: DenseNet121
+============================================================
+Downloading: "https://download.pytorch.org/models/densenet121-a639ec97.pth" to /root/.cache/torch/hub/checkpoints/densenet121-a639ec97.pth
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 30.8M/30.8M [00:00&lt;00:00, 226MB/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/3 | Train loss: 0.2165 | Train accuracy: 0.9307 | Val loss: 0.0706 | Val accuracy: 0.9783
+Epoch 2/3 | Train loss: 0.0771 | Train accuracy: 0.9813 | Val loss: 0.0483 | Val accuracy: 0.9918
+Epoch 3/3 | Train loss: 0.0564 | Train accuracy: 0.9854 | Val loss: 0.0325 | Val accuracy: 0.9918
+Test accuracy: 0.9902
+Elapsed time: 64.0 seconds
+
+============================================================
+Training: VGG16
+============================================================
+Downloading: "https://download.pytorch.org/models/vgg16-397923af.pth" to /root/.cache/torch/hub/checkpoints/vgg16-397923af.pth
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 528M/528M [00:06&lt;00:00, 84.1MB/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Epoch 1/3 | Train loss: 0.0513 | Train accuracy: 0.9830 | Val loss: 0.0159 | Val accuracy: 0.9959
+Epoch 2/3 | Train loss: 0.0206 | Train accuracy: 0.9935 | Val loss: 0.0129 | Val accuracy: 0.9973
+Epoch 3/3 | Train loss: 0.0141 | Train accuracy: 0.9959 | Val loss: 0.0130 | Val accuracy: 0.9946
+Test accuracy: 0.9959
+Elapsed time: 72.0 seconds
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-10-display-the-model-comparison-table">
+<h2>Step 10 — Display the model comparison table<a class="headerlink" href="#step-10-display-the-model-comparison-table" title="Link to this heading">#</a></h2>
+<p>Once all five models finish running, create the comparison table</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">results_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+
+<span class="n">metric_columns</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">"Accuracy"</span><span class="p">,</span>
+    <span class="s2">"Precision"</span><span class="p">,</span>
+    <span class="s2">"Recall"</span><span class="p">,</span>
+    <span class="s2">"F1-score"</span>
+<span class="p">]</span>
+
+<span class="n">results_df</span> <span class="o">=</span> <span class="n">results_df</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+    <span class="n">by</span><span class="o">=</span><span class="s2">"F1-score"</span><span class="p">,</span> <span class="n">ascending</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">(</span><span class="n">drop</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">display</span><span class="p">(</span>
+    <span class="n">results_df</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">format</span><span class="p">({</span>
+        <span class="s2">"Accuracy"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.4f}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"Precision"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.4f}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"Recall"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.4f}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"F1-score"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.4f}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"Test Loss"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.4f}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="s2">"Training Time (seconds)"</span><span class="p">:</span> <span class="s2">"</span><span class="si">{:.1f}</span><span class="s2">"</span>
+    <span class="p">})</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_21681" class="dataframe">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_21681_level0_col0" class="col_heading level0 col0" >Model</th>
+      <th id="T_21681_level0_col1" class="col_heading level0 col1" >Accuracy</th>
+      <th id="T_21681_level0_col2" class="col_heading level0 col2" >Precision</th>
+      <th id="T_21681_level0_col3" class="col_heading level0 col3" >Recall</th>
+      <th id="T_21681_level0_col4" class="col_heading level0 col4" >F1-score</th>
+      <th id="T_21681_level0_col5" class="col_heading level0 col5" >Test Loss</th>
+      <th id="T_21681_level0_col6" class="col_heading level0 col6" >Training Time (seconds)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_21681_level0_row0" class="row_heading level0 row0" >0</th>
+      <td id="T_21681_row0_col0" class="data row0 col0" >VGG16</td>
+      <td id="T_21681_row0_col1" class="data row0 col1" >0.9959</td>
+      <td id="T_21681_row0_col2" class="data row0 col2" >0.9960</td>
+      <td id="T_21681_row0_col3" class="data row0 col3" >0.9980</td>
+      <td id="T_21681_row0_col4" class="data row0 col4" >0.9970</td>
+      <td id="T_21681_row0_col5" class="data row0 col5" >0.0111</td>
+      <td id="T_21681_row0_col6" class="data row0 col6" >72.0</td>
+    </tr>
+    <tr>
+      <th id="T_21681_level0_row1" class="row_heading level0 row1" >1</th>
+      <td id="T_21681_row1_col0" class="data row1 col0" >ResNet50</td>
+      <td id="T_21681_row1_col1" class="data row1 col1" >0.9905</td>
+      <td id="T_21681_row1_col2" class="data row1 col2" >0.9865</td>
+      <td id="T_21681_row1_col3" class="data row1 col3" >0.9996</td>
+      <td id="T_21681_row1_col4" class="data row1 col4" >0.9930</td>
+      <td id="T_21681_row1_col5" class="data row1 col5" >0.0821</td>
+      <td id="T_21681_row1_col6" class="data row1 col6" >68.1</td>
+    </tr>
+    <tr>
+      <th id="T_21681_level0_row2" class="row_heading level0 row2" >2</th>
+      <td id="T_21681_row2_col0" class="data row2 col0" >DenseNet121</td>
+      <td id="T_21681_row2_col1" class="data row2 col1" >0.9902</td>
+      <td id="T_21681_row2_col2" class="data row2 col2" >0.9920</td>
+      <td id="T_21681_row2_col3" class="data row2 col3" >0.9936</td>
+      <td id="T_21681_row2_col4" class="data row2 col4" >0.9928</td>
+      <td id="T_21681_row2_col5" class="data row2 col5" >0.0496</td>
+      <td id="T_21681_row2_col6" class="data row2 col6" >64.0</td>
+    </tr>
+    <tr>
+      <th id="T_21681_level0_row3" class="row_heading level0 row3" >3</th>
+      <td id="T_21681_row3_col0" class="data row3 col0" >MobileNetV3-Large</td>
+      <td id="T_21681_row3_col1" class="data row3 col1" >0.9806</td>
+      <td id="T_21681_row3_col2" class="data row3 col2" >0.9790</td>
+      <td id="T_21681_row3_col3" class="data row3 col3" >0.9928</td>
+      <td id="T_21681_row3_col4" class="data row3 col4" >0.9858</td>
+      <td id="T_21681_row3_col5" class="data row3 col5" >0.0754</td>
+      <td id="T_21681_row3_col6" class="data row3 col6" >58.6</td>
+    </tr>
+    <tr>
+      <th id="T_21681_level0_row4" class="row_heading level0 row4" >4</th>
+      <td id="T_21681_row4_col0" class="data row4 col0" >EfficientNet-B0</td>
+      <td id="T_21681_row4_col1" class="data row4 col1" >0.9665</td>
+      <td id="T_21681_row4_col2" class="data row4 col2" >0.9628</td>
+      <td id="T_21681_row4_col3" class="data row4 col3" >0.9887</td>
+      <td id="T_21681_row4_col4" class="data row4 col4" >0.9756</td>
+      <td id="T_21681_row4_col5" class="data row4 col5" >0.1142</td>
+      <td id="T_21681_row4_col6" class="data row4 col6" >57.7</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Metric</p></th>
+<th class="head"><p>Meaning</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Accuracy</p></td>
+<td><p>Proportion of all test images classified correctly</p></td>
+</tr>
+<tr class="row-odd"><td><p>Precision</p></td>
+<td><p>Of the images predicted as dogs, the proportion that are dogs</p></td>
+</tr>
+<tr class="row-even"><td><p>Recall</p></td>
+<td><p>Of all actual dog images, the proportion correctly identified</p></td>
+</tr>
+<tr class="row-odd"><td><p>F1-score</p></td>
+<td><p>Harmonic mean of precision and recall</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="step-11-visualize-the-results">
+<h2>Step 11 — Visualize the results<a class="headerlink" href="#step-11-visualize-the-results" title="Link to this heading">#</a></h2>
+<p>A grouped bar chart makes the comparison easier to understand</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_df</span> <span class="o">=</span> <span class="n">results_df</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span>
+    <span class="n">id_vars</span><span class="o">=</span><span class="s2">"Model"</span><span class="p">,</span>
+    <span class="n">value_vars</span><span class="o">=</span><span class="n">metric_columns</span><span class="p">,</span>
+    <span class="n">var_name</span><span class="o">=</span><span class="s2">"Metric"</span><span class="p">,</span>
+    <span class="n">value_name</span><span class="o">=</span><span class="s2">"Score"</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">plot_df</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">"Model"</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">"Score"</span><span class="p">,</span>
+    <span class="n">hue</span><span class="o">=</span><span class="s2">"Metric"</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Performance Comparison of Pre-trained Models"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Model"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Score"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"Metric"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/23c90c0979669b79caffe4bb22d480ac3633ce4a2810b614bb4e1588fc20b359.png" src="_images/23c90c0979669b79caffe4bb22d480ac3633ce4a2810b614bb4e1588fc20b359.png" />
+</div>
+</div>
+<p>compare training time</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span>
+    <span class="n">data</span><span class="o">=</span><span class="n">results_df</span><span class="p">,</span>
+    <span class="n">x</span><span class="o">=</span><span class="s2">"Model"</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="s2">"Training Time (seconds)"</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Training Time by Model"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Model"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Training Time (seconds)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/6119ed87f5ee186dfebd68ec9e2f91f466dd6c3b6362b61fd4c635939c0fdf26.png" src="_images/6119ed87f5ee186dfebd68ec9e2f91f466dd6c3b6362b61fd4c635939c0fdf26.png" />
+</div>
+</div>
+</section>
+<section id="step-12-generate-a-confusion-matrix">
+<h2>Step 12 — Generate a confusion matrix<a class="headerlink" href="#step-12-generate-a-confusion-matrix" title="Link to this heading">#</a></h2>
+<p>The confusion matrix shows which cats and dogs each model misclassified. Start with the highest-ranked model</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">best_model_name</span> <span class="o">=</span> <span class="n">results_df</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"Model"</span><span class="p">]</span>
+
+<span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span> <span class="o">=</span> <span class="n">test_predictions</span><span class="p">[</span><span class="n">best_model_name</span><span class="p">]</span>
+
+<span class="n">cm</span> <span class="o">=</span> <span class="n">confusion_matrix</span><span class="p">(</span><span class="n">y_true</span><span class="p">,</span> <span class="n">y_pred</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">sns</span><span class="o">.</span><span class="n">heatmap</span><span class="p">(</span>
+    <span class="n">cm</span><span class="p">,</span>
+    <span class="n">annot</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fmt</span><span class="o">=</span><span class="s2">"d"</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">"Blues"</span><span class="p">,</span>
+    <span class="n">xticklabels</span><span class="o">=</span><span class="p">[</span><span class="s2">"Cat"</span><span class="p">,</span> <span class="s2">"Dog"</span><span class="p">],</span>
+    <span class="n">yticklabels</span><span class="o">=</span><span class="p">[</span><span class="s2">"Cat"</span><span class="p">,</span> <span class="s2">"Dog"</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Confusion Matrix — </span><span class="si">{</span><span class="n">best_model_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"Predicted Label"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"Actual Label"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Best model by F1-score:"</span><span class="p">,</span> <span class="n">best_model_name</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="n">classification_report</span><span class="p">(</span>
+        <span class="n">y_true</span><span class="p">,</span>
+        <span class="n">y_pred</span><span class="p">,</span>
+        <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+        <span class="n">target_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"Cat"</span><span class="p">,</span> <span class="s2">"Dog"</span><span class="p">],</span>
+        <span class="n">zero_division</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/9b2704f88d83bd13c817093e1a09f9a6904966a5195c21bcf2241a74d70048b4.png" src="_images/9b2704f88d83bd13c817093e1a09f9a6904966a5195c21bcf2241a74d70048b4.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Best model by F1-score: VGG16
+              precision    recall  f1-score   support
+
+         Cat       1.00      0.99      0.99      1183
+         Dog       1.00      1.00      1.00      2486
+
+    accuracy                           1.00      3669
+   macro avg       1.00      0.99      1.00      3669
+weighted avg       1.00      1.00      1.00      3669
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="step-13-analysis-of-results">
+<h2>Step 13 — Analysis of Results<a class="headerlink" href="#step-13-analysis-of-results" title="Link to this heading">#</a></h2>
+<section id="overall-performance-vgg16-achieved-the-highest-accuracy-of-99-59-and-the-highest-f1-score-of-99-70-this-indicates-that-it-provided-the-strongest-overall-balance-of-classification-performance-among-the-five-evaluated-models">
+<h3>1. Overall performance: VGG16 achieved the highest accuracy of 99.59% and the highest F1-score of 99.70%. This indicates that it provided the strongest overall balance of classification performance among the five evaluated models.<a class="headerlink" href="#overall-performance-vgg16-achieved-the-highest-accuracy-of-99-59-and-the-highest-f1-score-of-99-70-this-indicates-that-it-provided-the-strongest-overall-balance-of-classification-performance-among-the-five-evaluated-models" title="Link to this heading">#</a></h3>
+</section>
+<section id="precision-and-recall-resnet50-achieved-the-highest-recall-of-99-96-meaning-it-identified-nearly-all-actual-dog-images-vgg16-achieved-99-60-precision-and-99-80-recall-showing-that-it-performed-consistently-well-across-the-selected-metrics">
+<h3>2. Precision and recall: ResNet50 achieved the highest recall of 99.96%, meaning it identified nearly all actual dog images. VGG16 achieved 99.60% precision and 99.80% recall, showing that it performed consistently well across the selected metrics.<a class="headerlink" href="#precision-and-recall-resnet50-achieved-the-highest-recall-of-99-96-meaning-it-identified-nearly-all-actual-dog-images-vgg16-achieved-99-60-precision-and-99-80-recall-showing-that-it-performed-consistently-well-across-the-selected-metrics" title="Link to this heading">#</a></h3>
+</section>
+<section id="model-comparison-densenet121-achieved-99-02-accuracy-and-a-99-28-f1-score-placing-it-close-to-resnet50-mobilenetv3-large-achieved-98-06-accuracy-while-efficientnet-b0-achieved-96-65-although-all-five-models-performed-well-their-results-differed-under-the-same-experimental-setup">
+<h3>3. Model comparison: DenseNet121 achieved 99.02% accuracy and a 99.28% F1-score, placing it close to ResNet50. MobileNetV3-Large achieved 98.06% accuracy, while EfficientNet-B0 achieved 96.65%. Although all five models performed well, their results differed under the same experimental setup.<a class="headerlink" href="#model-comparison-densenet121-achieved-99-02-accuracy-and-a-99-28-f1-score-placing-it-close-to-resnet50-mobilenetv3-large-achieved-98-06-accuracy-while-efficientnet-b0-achieved-96-65-although-all-five-models-performed-well-their-results-differed-under-the-same-experimental-setup" title="Link to this heading">#</a></h3>
+</section>
+<section id="training-efficiency-efficientnet-b0-had-the-shortest-training-time-at-57-7-seconds-while-vgg16-took-72-0-seconds-this-demonstrates-a-trade-off-between-computational-time-and-classification-performance-in-this-experiment-vgg16-took-longer-but-achieved-the-best-accuracy-and-f1-score">
+<h3>4. Training efficiency: EfficientNet-B0 had the shortest training time at 57.7 seconds, while VGG16 took 72.0 seconds. This demonstrates a trade-off between computational time and classification performance in this experiment. VGG16 took longer but achieved the best accuracy and F1-score.<a class="headerlink" href="#training-efficiency-efficientnet-b0-had-the-shortest-training-time-at-57-7-seconds-while-vgg16-took-72-0-seconds-this-demonstrates-a-trade-off-between-computational-time-and-classification-performance-in-this-experiment-vgg16-took-longer-but-achieved-the-best-accuracy-and-f1-score" title="Link to this heading">#</a></h3>
+</section>
+<section id="model-architecture-the-differences-may-be-related-to-each-architecture-s-feature-extraction-design-complexity-and-suitability-for-this-dataset-the-models-used-pre-trained-imagenet-weights-with-only-their-final-classification-layers-trained-for-the-cat-versus-dog-task">
+<h3>5. Model architecture: The differences may be related to each architecture’s feature extraction design, complexity, and suitability for this dataset. The models used pre-trained ImageNet weights, with only their final classification layers trained for the cat-versus-dog task.<a class="headerlink" href="#model-architecture-the-differences-may-be-related-to-each-architecture-s-feature-extraction-design-complexity-and-suitability-for-this-dataset-the-models-used-pre-trained-imagenet-weights-with-only-their-final-classification-layers-trained-for-the-cat-versus-dog-task" title="Link to this heading">#</a></h3>
+</section>
+<section id="limitations-these-results-reflect-the-selected-dataset-preprocessing-random-split-and-three-training-epochs-the-results-do-not-establish-that-vgg16-will-always-outperform-the-other-models-on-different-datasets-or-unfamiliar-real-world-images">
+<h3>6. Limitations: These results reflect the selected dataset, preprocessing, random split, and three training epochs. The results do not establish that VGG16 will always outperform the other models on different datasets or unfamiliar real-world images.<a class="headerlink" href="#limitations-these-results-reflect-the-selected-dataset-preprocessing-random-split-and-three-training-epochs-the-results-do-not-establish-that-vgg16-will-always-outperform-the-other-models-on-different-datasets-or-unfamiliar-real-world-images" title="Link to this heading">#</a></h3>
+</section>
+</section>
+<section id="step-14-conclusion">
+<h2>Step 14 — Conclusion<a class="headerlink" href="#step-14-conclusion" title="Link to this heading">#</a></h2>
+<section id="this-laboratory-exercise-evaluated-five-pre-trained-convolutional-neural-networks-for-cat-versus-dog-image-classification-using-transfer-learning-a-custom-pytorch-dataset-class-and-dataloaders-were-implemented-to-load-and-process-images-in-batches-the-models-were-compared-using-accuracy-precision-recall-f1-score-test-loss-and-training-time">
+<h3>This laboratory exercise evaluated five pre-trained convolutional neural networks for cat-versus-dog image classification using transfer learning. A custom PyTorch Dataset class and DataLoaders were implemented to load and process images in batches. The models were compared using accuracy, precision, recall, F1-score, test loss, and training time.<a class="headerlink" href="#this-laboratory-exercise-evaluated-five-pre-trained-convolutional-neural-networks-for-cat-versus-dog-image-classification-using-transfer-learning-a-custom-pytorch-dataset-class-and-dataloaders-were-implemented-to-load-and-process-images-in-batches-the-models-were-compared-using-accuracy-precision-recall-f1-score-test-loss-and-training-time" title="Link to this heading">#</a></h3>
+</section>
+<section id="among-the-evaluated-models-vgg16-achieved-the-best-overall-performance-with-99-59-accuracy-and-a-99-70-f1-score-resnet50-achieved-the-highest-recall-at-99-96-while-efficientnet-b0-completed-training-in-the-shortest-time-at-57-7-seconds-these-results-illustrate-that-different-model-architectures-can-offer-different-balances-between-classification-performance-and-computational-efficiency-overall-the-activity-demonstrated-how-transfer-learning-and-appropriate-evaluation-metrics-can-be-used-to-compare-pre-trained-models-for-image-classification">
+<h3>Among the evaluated models, VGG16 achieved the best overall performance, with 99.59% accuracy and a 99.70% F1-score. ResNet50 achieved the highest recall at 99.96%, while EfficientNet-B0 completed training in the shortest time at 57.7 seconds. These results illustrate that different model architectures can offer different balances between classification performance and computational efficiency. Overall, the activity demonstrated how transfer learning and appropriate evaluation metrics can be used to compare pre-trained models for image classification.<a class="headerlink" href="#among-the-evaluated-models-vgg16-achieved-the-best-overall-performance-with-99-59-accuracy-and-a-99-70-f1-score-resnet50-achieved-the-highest-recall-at-99-96-while-efficientnet-b0-completed-training-in-the-shortest-time-at-57-7-seconds-these-results-illustrate-that-different-model-architectures-can-offer-different-balances-between-classification-performance-and-computational-efficiency-overall-the-activity-demonstrated-how-transfer-learning-and-appropriate-evaluation-metrics-can-be-used-to-compare-pre-trained-models-for-image-classification" title="Link to this heading">#</a></h3>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Laboratory%20Task%206.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Laboratory Task 6</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="student_analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Student Performance Analysis</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-1-choose-and-understand-the-dataset">Step 1 — Choose and understand the dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-2-install-and-import-the-libraries">Step 2 — Install and import the libraries</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-3-download-and-inspect-the-dataset">Step 3 — Download and inspect the dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-4-create-a-custom-pytorch-dataset-class">Step 4 — Create a custom PyTorch Dataset class</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-5-split-the-training-data">Step 5 — Split the training data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-6-create-dataloaders">Step 6 — Create DataLoaders</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-7-load-the-five-pre-trained-models">Step 7 — Load the five pre-trained models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-8-define-the-training-and-validation-functions">Step 8 — Define the training and validation functions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-9-evaluate-the-five-models">Step 9 — Evaluate the five models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-10-display-the-model-comparison-table">Step 10 — Display the model comparison table</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-11-visualize-the-results">Step 11 — Visualize the results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-12-generate-a-confusion-matrix">Step 12 — Generate a confusion matrix</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-13-analysis-of-results">Step 13 — Analysis of Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overall-performance-vgg16-achieved-the-highest-accuracy-of-99-59-and-the-highest-f1-score-of-99-70-this-indicates-that-it-provided-the-strongest-overall-balance-of-classification-performance-among-the-five-evaluated-models">1. Overall performance: VGG16 achieved the highest accuracy of 99.59% and the highest F1-score of 99.70%. This indicates that it provided the strongest overall balance of classification performance among the five evaluated models.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#precision-and-recall-resnet50-achieved-the-highest-recall-of-99-96-meaning-it-identified-nearly-all-actual-dog-images-vgg16-achieved-99-60-precision-and-99-80-recall-showing-that-it-performed-consistently-well-across-the-selected-metrics">2. Precision and recall: ResNet50 achieved the highest recall of 99.96%, meaning it identified nearly all actual dog images. VGG16 achieved 99.60% precision and 99.80% recall, showing that it performed consistently well across the selected metrics.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-comparison-densenet121-achieved-99-02-accuracy-and-a-99-28-f1-score-placing-it-close-to-resnet50-mobilenetv3-large-achieved-98-06-accuracy-while-efficientnet-b0-achieved-96-65-although-all-five-models-performed-well-their-results-differed-under-the-same-experimental-setup">3. Model comparison: DenseNet121 achieved 99.02% accuracy and a 99.28% F1-score, placing it close to ResNet50. MobileNetV3-Large achieved 98.06% accuracy, while EfficientNet-B0 achieved 96.65%. Although all five models performed well, their results differed under the same experimental setup.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#training-efficiency-efficientnet-b0-had-the-shortest-training-time-at-57-7-seconds-while-vgg16-took-72-0-seconds-this-demonstrates-a-trade-off-between-computational-time-and-classification-performance-in-this-experiment-vgg16-took-longer-but-achieved-the-best-accuracy-and-f1-score">4. Training efficiency: EfficientNet-B0 had the shortest training time at 57.7 seconds, while VGG16 took 72.0 seconds. This demonstrates a trade-off between computational time and classification performance in this experiment. VGG16 took longer but achieved the best accuracy and F1-score.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-architecture-the-differences-may-be-related-to-each-architecture-s-feature-extraction-design-complexity-and-suitability-for-this-dataset-the-models-used-pre-trained-imagenet-weights-with-only-their-final-classification-layers-trained-for-the-cat-versus-dog-task">5. Model architecture: The differences may be related to each architecture’s feature extraction design, complexity, and suitability for this dataset. The models used pre-trained ImageNet weights, with only their final classification layers trained for the cat-versus-dog task.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#limitations-these-results-reflect-the-selected-dataset-preprocessing-random-split-and-three-training-epochs-the-results-do-not-establish-that-vgg16-will-always-outperform-the-other-models-on-different-datasets-or-unfamiliar-real-world-images">6. Limitations: These results reflect the selected dataset, preprocessing, random split, and three training epochs. The results do not establish that VGG16 will always outperform the other models on different datasets or unfamiliar real-world images.</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#step-14-conclusion">Step 14 — Conclusion</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#this-laboratory-exercise-evaluated-five-pre-trained-convolutional-neural-networks-for-cat-versus-dog-image-classification-using-transfer-learning-a-custom-pytorch-dataset-class-and-dataloaders-were-implemented-to-load-and-process-images-in-batches-the-models-were-compared-using-accuracy-precision-recall-f1-score-test-loss-and-training-time">This laboratory exercise evaluated five pre-trained convolutional neural networks for cat-versus-dog image classification using transfer learning. A custom PyTorch Dataset class and DataLoaders were implemented to load and process images in batches. The models were compared using accuracy, precision, recall, F1-score, test loss, and training time.</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#among-the-evaluated-models-vgg16-achieved-the-best-overall-performance-with-99-59-accuracy-and-a-99-70-f1-score-resnet50-achieved-the-highest-recall-at-99-96-while-efficientnet-b0-completed-training-in-the-shortest-time-at-57-7-seconds-these-results-illustrate-that-different-model-architectures-can-offer-different-balances-between-classification-performance-and-computational-efficiency-overall-the-activity-demonstrated-how-transfer-learning-and-appropriate-evaluation-metrics-can-be-used-to-compare-pre-trained-models-for-image-classification">Among the evaluated models, VGG16 achieved the best overall performance, with 99.59% accuracy and a 99.70% F1-score. ResNet50 achieved the highest recall at 99.96%, while EfficientNet-B0 completed training in the shortest time at 57.7 seconds. These results illustrate that different model architectures can offer different balances between classification performance and computational efficiency. Overall, the activity demonstrated how transfer learning and appropriate evaluation metrics can be used to compare pre-trained models for image classification.</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Marlou Apuya
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>© 2026 Marlou Apuya, Data Science Portfolio.</p>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
