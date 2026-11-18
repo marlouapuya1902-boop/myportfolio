@@ -63,10 +63,11 @@ For my first experiment, I tested three learning rates: 0.0003(3e-4), 0.001(1e-3
 Here are the results:
 
 
-Learning Rate	Best Validation Accuracy	Final Validation Loss
-0.0003	87.10%	0.352318
-0.001	87.58%	0.347502
-0.003	87.75%	0.355785
+| Learning Rate | Best Validation Accuracy | Final Validation Loss |
+|---|---|---|
+| 0.0003 | 87.10% | 0.352318 |
+| 0.001 | 87.58% | 0.347502 |
+| 0.003 | 87.75% | 0.355785 |
 
 
 ![Figure 1. Effect of the Learning Rate (Adam), Narrow Range](figure1.png)
@@ -84,12 +85,13 @@ This time, I wanted to compare a wider range of values and observe what happens 
 Here are the results:
 
 
-Learning Rate	Best Validation Accuracy	Final Validation Loss
-0.00001	77.47%	0.706460
-0.0001	85.73%	0.349995 
-0.001	87.27%	0.349995 
-0.01	85.53%	0.410024 
-0.1	10.78%	2.315130 
+| Learning Rate | Best Validation Accuracy | Final Validation Loss |
+|---|---|---|
+| 0.00001 | 77.47% | 0.706460 |
+| 0.0001 | 85.73% | 0.393686 |
+| 0.001 | 87.27% | 0.349995 |
+| 0.01 | 85.53% | 0.410024 |
+| 0.1 | 10.78% | 2.315130 |
 
 
 
