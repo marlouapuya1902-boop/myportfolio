@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
   
@@ -417,22 +417,66 @@ Scheduler	None</p>
 <p>Experiment 1: Narrow-Range Learning Rates</p>
 <p>For my first experiment, I tested three learning rates: 0.0003(3e-4), 0.001(1e-3), and 0.003(3e-3). I wanted to see how values close to the default learning rate would affect the model.</p>
 <p>Here are the results:</p>
-<p>Learning Rate	Best Validation Accuracy	Final Validation Loss
-0.0003	87.10%	0.352318
-0.001	87.58%	0.347502
-0.003	87.75%	0.355785</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Learning Rate</p></th>
+<th class="head"><p>Best Validation Accuracy</p></th>
+<th class="head"><p>Final Validation Loss</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.0003</p></td>
+<td><p>87.10%</p></td>
+<td><p>0.352318</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.001</p></td>
+<td><p>87.58%</p></td>
+<td><p>0.347502</p></td>
+</tr>
+<tr class="row-even"><td><p>0.003</p></td>
+<td><p>87.75%</p></td>
+<td><p>0.355785</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p><img alt="Figure 1. Effect of the Learning Rate (Adam), Narrow Range" src="_images/figure1.png" /></p>
 <p>The results show that 0.003(3e-3) achieved the highest validation accuracy at 87.75%, while 0.001(1e-3) had the lowest final validation loss at 0.347502. The differences were small, but they helped me understand how learning rates close to each other can produce slightly different results.</p>
 <p>Experiment 2: Wide-Range Learning Rates</p>
 <p>For my second experiment, I tested five learning rates: 0.00001(1e-5), 0.0001(1e-4), 0.001(1e-3), 0.01(1e-2), and 0.1(1e-1).</p>
 <p>This time, I wanted to compare a wider range of values and observe what happens when the learning rate becomes too small or too large.</p>
 <p>Here are the results:</p>
-<p>Learning Rate	Best Validation Accuracy	Final Validation Loss
-0.00001	77.47%	0.706460
-0.0001	85.73%	0.349995
-0.001	87.27%	0.349995
-0.01	85.53%	0.410024
-0.1	10.78%	2.315130</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Learning Rate</p></th>
+<th class="head"><p>Best Validation Accuracy</p></th>
+<th class="head"><p>Final Validation Loss</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0.00001</p></td>
+<td><p>77.47%</p></td>
+<td><p>0.706460</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.0001</p></td>
+<td><p>85.73%</p></td>
+<td><p>0.393686</p></td>
+</tr>
+<tr class="row-even"><td><p>0.001</p></td>
+<td><p>87.27%</p></td>
+<td><p>0.349995</p></td>
+</tr>
+<tr class="row-odd"><td><p>0.01</p></td>
+<td><p>85.53%</p></td>
+<td><p>0.410024</p></td>
+</tr>
+<tr class="row-even"><td><p>0.1</p></td>
+<td><p>10.78%</p></td>
+<td><p>2.315130</p></td>
+</tr>
+</tbody>
+</table>
+</div>
 <p><img alt="Figure 2. Effect of the Learning Rate (Adam), Wide Range" src="_images/figure2.png" /></p>
 <p>The results show that 0.001(1e-3) performed best in terms of validation accuracy among the five settings. On the other hand, 0.1(1e-1) performed very poorly, reaching only 10.78% validation accuracy.</p>
 <p><img alt="Figure 3. Learning-Rate Sensitivity" src="_images/figure3.png" /></p>
