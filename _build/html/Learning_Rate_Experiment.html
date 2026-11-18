@@ -1,0 +1,2283 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Hyperparameters in Deep Learning — a hands-on tour with PyTorch Lightning &#8212; My Data Science Portfolio</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=fab101a9"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=b8b12719"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script type="application/vnd.jupyter.widget-state+json">{"state": {"6c4a1d478c874df995da1935c6136194": {"model_module": "@jupyter-widgets/base", "model_module_version": "1.2.0", "model_name": "LayoutModel", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "1.2.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "1.2.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "overflow_x": null, "overflow_y": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "e3b5d3fceb404e8a8e52caf4e6ed353b": {"model_module": "@jupyter-widgets/output", "model_module_version": "1.0.0", "model_name": "OutputModel", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/output", "_model_module_version": "1.0.0", "_model_name": "OutputModel", "_view_count": null, "_view_module": "@jupyter-widgets/output", "_view_module_version": "1.0.0", "_view_name": "OutputView", "layout": "IPY_MODEL_6c4a1d478c874df995da1935c6136194", "msg_id": "", "outputs": [{"data": {"text/html": "<pre style=\"white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace\">Epoch 4/4  <span style=\"color: #6206e0; text-decoration-color: #6206e0\">\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501</span> 844/844 <span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f\">0:00:27 \u2022 0:00:00</span> <span style=\"color: #7f7f7f; text-decoration-color: #7f7f7f; text-decoration: underline\">30.96it/s</span> <span style=\"font-style: italic\">v_num: 0.000 val_loss: 0.250      </span>\n                                                                                 <span style=\"font-style: italic\">val_acc: 0.909 train_loss: 0.233  </span>\n                                                                                 <span style=\"font-style: italic\">train_acc: 0.914                  </span>\n</pre>\n", "text/plain": "Epoch 4/4  \u001b[38;2;98;6;224m\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u001b[0m 844/844 \u001b[2m0:00:27 \u2022 0:00:00\u001b[0m \u001b[2;4m30.96it/s\u001b[0m \u001b[3mv_num: 0.000 val_loss: 0.250      \u001b[0m\n                                                                                 \u001b[3mval_acc: 0.909 train_loss: 0.233  \u001b[0m\n                                                                                 \u001b[3mtrain_acc: 0.914                  \u001b[0m\n"}, "metadata": {}, "output_type": "display_data"}]}}}, "version_major": 2, "version_minor": 0}</script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script crossorigin="anonymous" data-jupyter-widgets-cdn="https://cdn.jsdelivr.net/npm/" src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@1.0.6/dist/embed-amd.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'Learning_Rate_Experiment';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Student Performance Analysis" href="student_analysis.html" />
+    <link rel="prev" title="&lt;no title&gt;" href="learning_rate_post.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">My Data Science Portfolio</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Elective 4</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%202.html">Laboratory Task 2</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%203.html">Laboratory Task 3</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%204.html">Laboratory Task 4</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%205.html">Laboratory Task 5</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laboratory%20Task%206.html">Laboratory Task 6</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Laboratory_Exercise_Image_Classification.html">Laboratory Exercise (Model Inference on Custom Dataset)</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Hyperparameters in Deep Learning — a hands-on tour with PyTorch Lightning</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Personal Projects</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="student_analysis.html">Student Performance Analysis</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/Learning_Rate_Experiment.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button pst-navbar-icon"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm pst-navbar-icon" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Hyperparameters in Deep Learning — a hands-on tour with PyTorch Lightning</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">0. Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#all-hyperparameters-in-one-place">1. All hyperparameters in one place</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-fashion-mnist-in-a-lightningdatamodule">2. Data: Fashion-MNIST in a <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-architecture-hyperparameters">3. Model: architecture hyperparameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-logic-the-lightningmodule">4. Training logic: the <code class="docutils literal notranslate"><span class="pre">LightningModule</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-rate">Learning rate</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizer">Optimizer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#weight-decay">Weight decay</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-rate-scheduler">Learning-rate scheduler</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-training-loop-trainer-hyperparameters">5. The training loop: <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> hyperparameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#baseline-run">Baseline run</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experiments-change-one-thing-at-a-time">6. Experiments: change one thing at a time</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">6.1 Learning rate</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#my-changes-in-6-1-what-i-changed-or-added">My changes in 6.1 (what I changed or added)</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="hyperparameters-in-deep-learning-a-hands-on-tour-with-pytorch-lightning">
+<h1>Hyperparameters in Deep Learning — a hands-on tour with PyTorch Lightning<a class="headerlink" href="#hyperparameters-in-deep-learning-a-hands-on-tour-with-pytorch-lightning" title="Link to this heading">#</a></h1>
+<p>This notebook builds a small but complete image-classification framework on <strong>Fashion-MNIST</strong> and uses it to study <strong>hyperparameters</strong>: what they are, where they live in the code, and what happens when you change them.</p>
+<p><strong>What you will build</strong></p>
+<ol class="arabic simple">
+<li><p>One <code class="docutils literal notranslate"><span class="pre">HParams</span></code> config object that holds <em>every</em> hyperparameter in one place</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code> (data), a CNN (<code class="docutils literal notranslate"><span class="pre">nn.Module</span></code>) and a <code class="docutils literal notranslate"><span class="pre">LightningModule</span></code> (training logic)</p></li>
+<li><p>A <code class="docutils literal notranslate"><span class="pre">fit()</span></code> helper that trains a model from a config and returns its learning curves</p></li>
+<li><p>Controlled experiments: learning rate, batch size, optimizer, regularisation</p></li>
+<li><p>A small random search, then one final evaluation on the test set</p></li>
+</ol>
+<p><strong>Parameters vs. hyperparameters</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>Parameters</p></th>
+<th class="head"><p>Hyperparameters</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>What</p></td>
+<td><p>Weights and biases of the network</p></td>
+<td><p>Settings that define the model and how it is trained</p></td>
+</tr>
+<tr class="row-odd"><td><p>Who sets them</p></td>
+<td><p>The optimizer, by gradient descent</p></td>
+<td><p>You, before training starts</p></td>
+</tr>
+<tr class="row-even"><td><p>Learned from</p></td>
+<td><p>Training data</p></td>
+<td><p>Validation performance (trial and comparison)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Examples</p></td>
+<td><p>Conv kernels, linear weights</p></td>
+<td><p>Learning rate, batch size, dropout, number of layers</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A useful mental model: the optimizer searches for good <strong>parameters</strong> inside a search problem that the <strong>hyperparameters</strong> define. Bad hyperparameters make that inner problem hard or impossible, no matter how long you train.</p>
+<section id="setup">
+<h2>0. Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<p>Uncomment the next cell if the packages are not installed yet (for example on a fresh Colab runtime).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install torch torchvision lightning pandas matplotlib
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: torch in /usr/local/lib/python3.13/dist-packages (2.14.1+cu130)
+Requirement already satisfied: torchvision in /usr/local/lib/python3.13/dist-packages (0.29.1+cu130)
+Collecting lightning
+  Downloading lightning-2.6.6-py3-none-any.whl.metadata (45 kB)
+Requirement already satisfied: pandas in /usr/local/lib/python3.13/dist-packages (2.2.3)
+Requirement already satisfied: matplotlib in /usr/local/lib/python3.13/dist-packages (3.10.0)
+Requirement already satisfied: filelock in /usr/local/lib/python3.13/dist-packages (from torch) (4.2.7)
+Requirement already satisfied: typing-extensions&gt;=4.10.0 in /usr/local/lib/python3.13/dist-packages (from torch) (4.16.0)
+Requirement already satisfied: setuptools&gt;=77.0.3 in /usr/local/lib/python3.13/dist-packages (from torch) (80.10.2)
+Requirement already satisfied: sympy&gt;=1.13.3 in /usr/local/lib/python3.13/dist-packages (from torch) (1.14.0)
+Requirement already satisfied: networkx&gt;=2.5.1 in /usr/local/lib/python3.13/dist-packages (from torch) (3.7)
+Requirement already satisfied: jinja2 in /usr/local/lib/python3.13/dist-packages (from torch) (3.1.6)
+Requirement already satisfied: fsspec&gt;=0.8.5 in /usr/local/lib/python3.13/dist-packages (from torch) (2025.12.0)
+Requirement already satisfied: cuda-toolkit==13.0.3 in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (13.0.3.0)
+Requirement already satisfied: cuda-bindings&lt;14,&gt;=13.0.3 in /usr/local/lib/python3.13/dist-packages (from torch) (13.0.3)
+Requirement already satisfied: nvidia-cudnn-cu13==9.24.0.43 in /usr/local/lib/python3.13/dist-packages (from torch) (9.24.0.43)
+Requirement already satisfied: nvidia-cusparselt-cu13==0.8.1 in /usr/local/lib/python3.13/dist-packages (from torch) (0.8.1)
+Requirement already satisfied: nvidia-nccl-cu13==2.30.7 in /usr/local/lib/python3.13/dist-packages (from torch) (2.30.7)
+Requirement already satisfied: nvidia-nvshmem-cu13==3.4.5 in /usr/local/lib/python3.13/dist-packages (from torch) (3.4.5)
+Requirement already satisfied: triton~=3.8.0 in /usr/local/lib/python3.13/dist-packages (from torch) (3.8.0)
+Requirement already satisfied: nvidia-cublas==13.1.1.3.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (13.1.1.3)
+Requirement already satisfied: nvidia-cuda-nvrtc==13.0.88.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (13.0.88)
+Requirement already satisfied: nvidia-cuda-runtime==13.0.96.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (13.0.96)
+Requirement already satisfied: nvidia-cufft==12.0.0.61.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (12.0.0.61)
+Requirement already satisfied: nvidia-nvjitlink&lt;14,&gt;=13.0.88 in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (13.4.92)
+Requirement already satisfied: nvidia-cufile==1.15.1.6.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (1.15.1.6)
+Requirement already satisfied: nvidia-cuda-cupti==13.0.85.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (13.0.85)
+Requirement already satisfied: nvidia-curand==10.4.0.35.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (10.4.0.35)
+Requirement already satisfied: nvidia-cusolver==12.0.4.66.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (12.0.4.66)
+Requirement already satisfied: nvidia-cusparse==12.6.3.3.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (12.6.3.3)
+Requirement already satisfied: nvidia-nvtx==13.0.85.* in /usr/local/lib/python3.13/dist-packages (from cuda-toolkit[cublas,cudart,cufft,cufile,cupti,curand,cusolver,cusparse,nvjitlink,nvrtc,nvtx]==13.0.3; platform_system == "Linux"-&gt;torch) (13.0.85)
+Requirement already satisfied: cuda-pathfinder~=1.1 in /usr/local/lib/python3.13/dist-packages (from cuda-bindings&lt;14,&gt;=13.0.3-&gt;torch) (1.8.5)
+Requirement already satisfied: numpy in /usr/local/lib/python3.13/dist-packages (from torchvision) (2.4.6)
+Requirement already satisfied: pillow!=8.3.*,&gt;=5.3.0 in /usr/local/lib/python3.13/dist-packages (from torchvision) (11.3.0)
+Requirement already satisfied: PyYAML&lt;8.0,&gt;5.4 in /usr/local/lib/python3.13/dist-packages (from lightning) (6.0.3)
+Collecting lightning-utilities&lt;2.0,&gt;=0.10.0 (from lightning)
+  Downloading lightning_utilities-0.15.3-py3-none-any.whl.metadata (5.5 kB)
+Requirement already satisfied: packaging&lt;27.0,&gt;=23.0 in /usr/local/lib/python3.13/dist-packages (from lightning) (26.3)
+Collecting torchmetrics&lt;3.0,&gt;0.7.0 (from lightning)
+  Downloading torchmetrics-1.9.0-py3-none-any.whl.metadata (23 kB)
+Requirement already satisfied: tqdm&lt;6.0,&gt;=4.57.0 in /usr/local/lib/python3.13/dist-packages (from lightning) (4.67.3)
+Collecting pytorch-lightning (from lightning)
+  Downloading pytorch_lightning-2.6.6-py3-none-any.whl.metadata (21 kB)
+Requirement already satisfied: aiohttp!=4.0.0a0,!=4.0.0a1 in /usr/local/lib/python3.13/dist-packages (from fsspec[http]&lt;2028.0,&gt;=2022.5.0-&gt;lightning) (3.14.5)
+Requirement already satisfied: python-dateutil&gt;=2.8.2 in /usr/local/lib/python3.13/dist-packages (from pandas) (2.9.0.post0)
+Requirement already satisfied: pytz&gt;=2020.1 in /usr/local/lib/python3.13/dist-packages (from pandas) (2025.2)
+Requirement already satisfied: tzdata&gt;=2022.7 in /usr/local/lib/python3.13/dist-packages (from pandas) (2026.6)
+Requirement already satisfied: contourpy&gt;=1.0.1 in /usr/local/lib/python3.13/dist-packages (from matplotlib) (1.4.0)
+Requirement already satisfied: cycler&gt;=0.10 in /usr/local/lib/python3.13/dist-packages (from matplotlib) (0.12.1)
+Requirement already satisfied: fonttools&gt;=4.22.0 in /usr/local/lib/python3.13/dist-packages (from matplotlib) (4.68.0)
+Requirement already satisfied: kiwisolver&gt;=1.3.1 in /usr/local/lib/python3.13/dist-packages (from matplotlib) (1.5.1)
+Requirement already satisfied: pyparsing&gt;=2.3.1 in /usr/local/lib/python3.13/dist-packages (from matplotlib) (3.3.3)
+Requirement already satisfied: aiohappyeyeballs&gt;=2.5.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1-&gt;fsspec[http]&lt;2028.0,&gt;=2022.5.0-&gt;lightning) (2.7.1)
+Requirement already satisfied: aiosignal&gt;=1.4.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1-&gt;fsspec[http]&lt;2028.0,&gt;=2022.5.0-&gt;lightning) (1.4.0)
+Requirement already satisfied: attrs&gt;=17.3.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1-&gt;fsspec[http]&lt;2028.0,&gt;=2022.5.0-&gt;lightning) (26.1.0)
+Requirement already satisfied: frozenlist&gt;=1.1.1 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1-&gt;fsspec[http]&lt;2028.0,&gt;=2022.5.0-&gt;lightning) (1.8.0)
+Requirement already satisfied: multidict&lt;8.0,&gt;=4.5 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1-&gt;fsspec[http]&lt;2028.0,&gt;=2022.5.0-&gt;lightning) (7.2.1)
+Requirement already satisfied: propcache&gt;=0.2.0 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1-&gt;fsspec[http]&lt;2028.0,&gt;=2022.5.0-&gt;lightning) (0.5.4)
+Requirement already satisfied: yarl&lt;2.0,&gt;=1.25.1 in /usr/local/lib/python3.13/dist-packages (from aiohttp!=4.0.0a0,!=4.0.0a1-&gt;fsspec[http]&lt;2028.0,&gt;=2022.5.0-&gt;lightning) (1.25.1)
+Requirement already satisfied: idna&gt;=2.0 in /usr/local/lib/python3.13/dist-packages (from yarl&lt;2.0,&gt;=1.25.1-&gt;aiohttp!=4.0.0a0,!=4.0.0a1-&gt;fsspec[http]&lt;2028.0,&gt;=2022.5.0-&gt;lightning) (3.20)
+Requirement already satisfied: six&gt;=1.5 in /usr/local/lib/python3.13/dist-packages (from python-dateutil&gt;=2.8.2-&gt;pandas) (1.17.0)
+Requirement already satisfied: mpmath&lt;1.4,&gt;=1.1.0 in /usr/local/lib/python3.13/dist-packages (from sympy&gt;=1.13.3-&gt;torch) (1.3.0)
+Requirement already satisfied: MarkupSafe&gt;=2.0 in /usr/local/lib/python3.13/dist-packages (from jinja2-&gt;torch) (3.0.4)
+Downloading lightning-2.6.6-py3-none-any.whl (849 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">849.3/849.3 kB</span> <span class=" -Color -Color-Red">25.0 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
+?25hDownloading lightning_utilities-0.15.3-py3-none-any.whl (31 kB)
+Downloading torchmetrics-1.9.0-py3-none-any.whl (983 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">983.4/983.4 kB</span> <span class=" -Color -Color-Red">52.7 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
+?25hDownloading pytorch_lightning-2.6.6-py3-none-any.whl (853 kB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">853.0/853.0 kB</span> <span class=" -Color -Color-Red">22.2 MB/s</span>  <span class=" -Color -Color-Yellow">0:00:00</span>
+?25hInstalling collected packages: lightning-utilities, torchmetrics, pytorch-lightning, lightning
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ <span class=" -Color -Color-Green">4/4</span> [lightning]
+Successfully installed lightning-2.6.6 lightning-utilities-0.15.3 pytorch-lightning-2.6.6 torchmetrics-1.9.0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">dataclasses</span><span class="w"> </span><span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">replace</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Optional</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DataLoader</span><span class="p">,</span> <span class="n">Subset</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torchvision</span><span class="w"> </span><span class="kn">import</span> <span class="n">datasets</span><span class="p">,</span> <span class="n">transforms</span>
+
+<span class="c1"># Lightning 2.x is imported as `lightning`; older installs use `pytorch_lightning`.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">lightning</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">L</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">lightning.pytorch.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">EarlyStopping</span><span class="p">,</span> <span class="n">ModelCheckpoint</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">lightning.pytorch.loggers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CSVLogger</span>
+    <span class="n">_LIGHTNING_LOGGER</span> <span class="o">=</span> <span class="s2">"lightning.pytorch"</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pytorch_lightning</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">L</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pytorch_lightning.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="n">EarlyStopping</span><span class="p">,</span> <span class="n">ModelCheckpoint</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">pytorch_lightning.loggers</span><span class="w"> </span><span class="kn">import</span> <span class="n">CSVLogger</span>
+    <span class="n">_LIGHTNING_LOGGER</span> <span class="o">=</span> <span class="s2">"pytorch_lightning"</span>
+
+<span class="c1"># Keep the output readable during the many short training runs below.</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">".*does not have many workers.*"</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">".*logging interval.*"</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"torch:"</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"lightning:"</span><span class="p">,</span> <span class="n">L</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"GPU available:"</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>torch: 2.14.1+cu130
+lightning: 2.6.6
+GPU available: True
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="all-hyperparameters-in-one-place">
+<h2>1. All hyperparameters in one place<a class="headerlink" href="#all-hyperparameters-in-one-place" title="Link to this heading">#</a></h2>
+<p>The single most useful habit when working with hyperparameters is to <strong>keep them out of the code body</strong>. Nothing below this cell contains a hard-coded <code class="docutils literal notranslate"><span class="pre">0.001</span></code> or <code class="docutils literal notranslate"><span class="pre">64</span></code>; every tunable number is a field of <code class="docutils literal notranslate"><span class="pre">HParams</span></code>.</p>
+<p>This gives you three things for free:</p>
+<ul class="simple">
+<li><p><strong>Reproducibility</strong> — a run is fully described by one small object</p></li>
+<li><p><strong>Easy experiments</strong> — <code class="docutils literal notranslate"><span class="pre">replace(hp,</span> <span class="pre">lr=0.01)</span></code> creates a variant without touching the model</p></li>
+<li><p><strong>Logging</strong> — Lightning stores the config next to the metrics and inside every checkpoint</p></li>
+</ul>
+<p>The fields fall into four families:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Family</p></th>
+<th class="head"><p>Fields</p></th>
+<th class="head"><p>What they control</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>Data</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code>, <code class="docutils literal notranslate"><span class="pre">val_fraction</span></code>, <code class="docutils literal notranslate"><span class="pre">train_subset</span></code>, <code class="docutils literal notranslate"><span class="pre">augment</span></code></p></td>
+<td><p>What the model sees in each step</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Model (architecture)</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">conv1_channels</span></code>, <code class="docutils literal notranslate"><span class="pre">conv2_channels</span></code>, <code class="docutils literal notranslate"><span class="pre">hidden_dim</span></code>, <code class="docutils literal notranslate"><span class="pre">activation</span></code>, <code class="docutils literal notranslate"><span class="pre">use_batchnorm</span></code>, <code class="docutils literal notranslate"><span class="pre">dropout</span></code></p></td>
+<td><p>Capacity: how complex a function the network can represent</p></td>
+</tr>
+<tr class="row-even"><td><p><strong>Optimisation</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">optimizer</span></code>, <code class="docutils literal notranslate"><span class="pre">lr</span></code>, <code class="docutils literal notranslate"><span class="pre">momentum</span></code>, <code class="docutils literal notranslate"><span class="pre">weight_decay</span></code>, <code class="docutils literal notranslate"><span class="pre">scheduler</span></code></p></td>
+<td><p>How the weights move at each step</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Training loop</strong></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">max_epochs</span></code>, <code class="docutils literal notranslate"><span class="pre">patience</span></code>, <code class="docutils literal notranslate"><span class="pre">seed</span></code></p></td>
+<td><p>How long training runs and where it starts from</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nd">@dataclass</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">HParams</span><span class="p">:</span>
+    <span class="c1"># ---- Data -------------------------------------------------------------</span>
+    <span class="n">data_dir</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"./data"</span>
+    <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span>          <span class="c1"># samples per gradient step</span>
+    <span class="n">val_fraction</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.1</span>     <span class="c1"># share of the training set held out for validation</span>
+    <span class="n">train_subset</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># use only N training images (None = all); for fast experiments</span>
+    <span class="n">augment</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>         <span class="c1"># random crop + horizontal flip on training images</span>
+    <span class="n">num_workers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>          <span class="c1"># data-loading processes (not a model hyperparameter; 0 is safest in notebooks)</span>
+
+    <span class="c1"># ---- Model ------------------------------------------------------------</span>
+    <span class="n">conv1_channels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">32</span>      <span class="c1"># width of the first conv block</span>
+    <span class="n">conv2_channels</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">64</span>      <span class="c1"># width of the second conv block</span>
+    <span class="n">hidden_dim</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">128</span>         <span class="c1"># size of the fully connected layer</span>
+    <span class="n">activation</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"relu"</span>      <span class="c1"># relu | leaky_relu | gelu | tanh</span>
+    <span class="n">use_batchnorm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>    <span class="c1"># batch normalisation after each conv</span>
+    <span class="n">dropout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.25</span>         <span class="c1"># probability of zeroing an activation in the classifier head</span>
+
+    <span class="c1"># ---- Optimisation -----------------------------------------------------</span>
+    <span class="n">optimizer</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"adam"</span>       <span class="c1"># sgd | adam | adamw</span>
+    <span class="n">lr</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-3</span>              <span class="c1"># learning rate (step size)</span>
+    <span class="n">momentum</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.9</span>         <span class="c1"># used by SGD only</span>
+    <span class="n">weight_decay</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.0</span>     <span class="c1"># L2-style penalty on the weights</span>
+    <span class="n">scheduler</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"none"</span>       <span class="c1"># none | step | cosine</span>
+
+    <span class="c1"># ---- Training loop ----------------------------------------------------</span>
+    <span class="n">max_epochs</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>           <span class="c1"># upper limit on passes over the training set</span>
+    <span class="n">patience</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">3</span>             <span class="c1"># early stopping: epochs without val_loss improvement before stopping</span>
+    <span class="n">seed</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">42</span>                <span class="c1"># controls weight init, data split and shuffling</span>
+
+
+<span class="n">hp</span> <span class="o">=</span> <span class="n">HParams</span><span class="p">()</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">hp</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">"value"</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+  <div id="df-f1665384-e5df-4ace-8335-f93731094c69" class="colab-df-container">
+    <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>data_dir</th>
+      <td>./data</td>
+    </tr>
+    <tr>
+      <th>batch_size</th>
+      <td>64</td>
+    </tr>
+    <tr>
+      <th>val_fraction</th>
+      <td>0.1</td>
+    </tr>
+    <tr>
+      <th>train_subset</th>
+      <td>None</td>
+    </tr>
+    <tr>
+      <th>augment</th>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>num_workers</th>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>conv1_channels</th>
+      <td>32</td>
+    </tr>
+    <tr>
+      <th>conv2_channels</th>
+      <td>64</td>
+    </tr>
+    <tr>
+      <th>hidden_dim</th>
+      <td>128</td>
+    </tr>
+    <tr>
+      <th>activation</th>
+      <td>relu</td>
+    </tr>
+    <tr>
+      <th>use_batchnorm</th>
+      <td>True</td>
+    </tr>
+    <tr>
+      <th>dropout</th>
+      <td>0.25</td>
+    </tr>
+    <tr>
+      <th>optimizer</th>
+      <td>adam</td>
+    </tr>
+    <tr>
+      <th>lr</th>
+      <td>0.001</td>
+    </tr>
+    <tr>
+      <th>momentum</th>
+      <td>0.9</td>
+    </tr>
+    <tr>
+      <th>weight_decay</th>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>scheduler</th>
+      <td>none</td>
+    </tr>
+    <tr>
+      <th>max_epochs</th>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>patience</th>
+      <td>3</td>
+    </tr>
+    <tr>
+      <th>seed</th>
+      <td>42</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-f1665384-e5df-4ace-8335-f93731094c69')"
+            title="Convert this dataframe to an interactive table."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-f1665384-e5df-4ace-8335-f93731094c69 button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-f1665384-e5df-4ace-8335-f93731094c69');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+    </div>
+  </div>
+</div></div>
+</div>
+</section>
+<section id="data-fashion-mnist-in-a-lightningdatamodule">
+<h2>2. Data: Fashion-MNIST in a <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code><a class="headerlink" href="#data-fashion-mnist-in-a-lightningdatamodule" title="Link to this heading">#</a></h2>
+<p>Fashion-MNIST ships with <code class="docutils literal notranslate"><span class="pre">torchvision.datasets</span></code>: 60,000 training and 10,000 test images, 28×28 grayscale, 10 clothing classes. It is as small as MNIST but hard enough that hyperparameter choices visibly matter.</p>
+<p><strong>Three splits, three jobs</strong></p>
+<ul class="simple">
+<li><p><strong>Train</strong> — used to fit the <em>parameters</em></p></li>
+<li><p><strong>Validation</strong> — used to choose the <em>hyperparameters</em> (and for early stopping)</p></li>
+<li><p><strong>Test</strong> — used <strong>once</strong>, at the very end, to report the final number</p></li>
+</ul>
+<p>If you tune hyperparameters on the test set, the test score stops being an honest estimate of how the model performs on new data. That is why <code class="docutils literal notranslate"><span class="pre">val_fraction</span></code> exists.</p>
+<p><strong>Hyperparameters used here</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">batch_size</span></code> — how many images make up one gradient estimate</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">val_fraction</span></code> — bigger means a more reliable validation score but less training data</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">augment</span></code> — random transformations that make the training set effectively larger (a form of regularisation)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">train_subset</span></code> — not something you would tune for a final model, but very handy for cheap experiments</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">CLASS_NAMES</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"T-shirt/top"</span><span class="p">,</span> <span class="s2">"Trouser"</span><span class="p">,</span> <span class="s2">"Pullover"</span><span class="p">,</span> <span class="s2">"Dress"</span><span class="p">,</span> <span class="s2">"Coat"</span><span class="p">,</span>
+               <span class="s2">"Sandal"</span><span class="p">,</span> <span class="s2">"Shirt"</span><span class="p">,</span> <span class="s2">"Sneaker"</span><span class="p">,</span> <span class="s2">"Bag"</span><span class="p">,</span> <span class="s2">"Ankle boot"</span><span class="p">]</span>
+
+<span class="c1"># Mean and standard deviation of the Fashion-MNIST training pixels.</span>
+<span class="n">FMNIST_MEAN</span><span class="p">,</span> <span class="n">FMNIST_STD</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.2860</span><span class="p">,),</span> <span class="p">(</span><span class="mf">0.3530</span><span class="p">,)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">FashionMNISTDataModule</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">LightningDataModule</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hp</span><span class="p">:</span> <span class="n">HParams</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hp</span> <span class="o">=</span> <span class="n">hp</span>
+        <span class="n">normalize</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Normalize</span><span class="p">(</span><span class="n">FMNIST_MEAN</span><span class="p">,</span> <span class="n">FMNIST_STD</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eval_transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span><span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span> <span class="n">normalize</span><span class="p">])</span>
+
+        <span class="n">augmentations</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">hp</span><span class="o">.</span><span class="n">augment</span><span class="p">:</span>  <span class="c1"># &lt;-- hyperparameter: augment</span>
+            <span class="n">augmentations</span> <span class="o">=</span> <span class="p">[</span><span class="n">transforms</span><span class="o">.</span><span class="n">RandomCrop</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">2</span><span class="p">),</span>
+                             <span class="n">transforms</span><span class="o">.</span><span class="n">RandomHorizontalFlip</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_transform</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">Compose</span><span class="p">([</span><span class="o">*</span><span class="n">augmentations</span><span class="p">,</span> <span class="n">transforms</span><span class="o">.</span><span class="n">ToTensor</span><span class="p">(),</span> <span class="n">normalize</span><span class="p">])</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Download once. Lightning calls this on a single process.</span>
+        <span class="n">datasets</span><span class="o">.</span><span class="n">FashionMNIST</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">datasets</span><span class="o">.</span><span class="n">FashionMNIST</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">download</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># Two views of the same 60k images: one with training transforms, one without.</span>
+        <span class="n">train_view</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">FashionMNIST</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">train_transform</span><span class="p">)</span>
+        <span class="n">eval_view</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">FashionMNIST</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_transform</span><span class="p">)</span>
+
+        <span class="n">n_total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">train_view</span><span class="p">)</span>
+        <span class="n">n_val</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">n_total</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">val_fraction</span><span class="p">)</span>  <span class="c1"># &lt;-- hyperparameter: val_fraction</span>
+        <span class="n">generator</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">Generator</span><span class="p">()</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randperm</span><span class="p">(</span><span class="n">n_total</span><span class="p">,</span> <span class="n">generator</span><span class="o">=</span><span class="n">generator</span><span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">val_idx</span><span class="p">,</span> <span class="n">train_idx</span> <span class="o">=</span> <span class="n">indices</span><span class="p">[:</span><span class="n">n_val</span><span class="p">],</span> <span class="n">indices</span><span class="p">[</span><span class="n">n_val</span><span class="p">:]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">train_subset</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># &lt;-- hyperparameter: train_subset</span>
+            <span class="n">train_idx</span> <span class="o">=</span> <span class="n">train_idx</span><span class="p">[:</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">train_subset</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span> <span class="o">=</span> <span class="n">Subset</span><span class="p">(</span><span class="n">train_view</span><span class="p">,</span> <span class="n">train_idx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">val_ds</span> <span class="o">=</span> <span class="n">Subset</span><span class="p">(</span><span class="n">eval_view</span><span class="p">,</span> <span class="n">val_idx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_ds</span> <span class="o">=</span> <span class="n">datasets</span><span class="o">.</span><span class="n">FashionMNIST</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">data_dir</span><span class="p">,</span> <span class="n">train</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">eval_transform</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_loader</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">DataLoader</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="n">shuffle</span><span class="p">,</span>
+                          <span class="n">num_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">num_workers</span><span class="p">,</span>
+                          <span class="n">persistent_workers</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">num_workers</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">train_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">train_ds</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp</span><span class="o">.</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># &lt;-- hyperparameter: batch_size</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">val_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># The evaluation batch size only affects speed, never the result.</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">val_ds</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_dataloader</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">test_ds</span><span class="p">,</span> <span class="mi">512</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dm</span> <span class="o">=</span> <span class="n">FashionMNISTDataModule</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span>
+<span class="n">dm</span><span class="o">.</span><span class="n">prepare_data</span><span class="p">()</span>
+<span class="n">dm</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"train: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">train_ds</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">   val: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">val_ds</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">   test: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">test_ds</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="n">images</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="n">dm</span><span class="o">.</span><span class="n">val_dataloader</span><span class="p">()))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"batch shape:"</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">images</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">3.4</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">img</span><span class="p">,</span> <span class="n">label</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="o">.</span><span class="n">flat</span><span class="p">,</span> <span class="n">images</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><span class="n">img</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">*</span> <span class="n">FMNIST_STD</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">FMNIST_MEAN</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">CLASS_NAMES</span><span class="p">[</span><span class="n">label</span><span class="p">],</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">9</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>100%|██████████| 26.4M/26.4M [00:02&lt;00:00, 12.3MB/s]
+100%|██████████| 29.5k/29.5k [00:00&lt;00:00, 206kB/s]
+100%|██████████| 4.42M/4.42M [00:01&lt;00:00, 3.84MB/s]
+100%|██████████| 5.15k/5.15k [00:00&lt;00:00, 23.3MB/s]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>train: 54,000   val: 6,000   test: 10,000
+batch shape: (512, 1, 28, 28)
+</pre></div>
+</div>
+<img alt="_images/56c2f90418210f22ff2c38fd1d1b7a113f31dfae982cb267511e68c9d7855161.png" src="_images/56c2f90418210f22ff2c38fd1d1b7a113f31dfae982cb267511e68c9d7855161.png" />
+</div>
+</div>
+</section>
+<section id="model-architecture-hyperparameters">
+<h2>3. Model: architecture hyperparameters<a class="headerlink" href="#model-architecture-hyperparameters" title="Link to this heading">#</a></h2>
+<p>The network is a classic small CNN:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>input 1×28×28
+ → Conv(3×3, conv1_channels) → [BatchNorm] → activation → MaxPool   (14×14)
+ → Conv(3×3, conv2_channels) → [BatchNorm] → activation → MaxPool   (7×7)
+ → Flatten → Dropout → Linear(hidden_dim) → activation → Dropout → Linear(10)
+</pre></div>
+</div>
+<p>Every architectural choice is read from <code class="docutils literal notranslate"><span class="pre">HParams</span></code>:</p>
+<ul class="simple">
+<li><p><strong>Width</strong> (<code class="docutils literal notranslate"><span class="pre">conv1_channels</span></code>, <code class="docutils literal notranslate"><span class="pre">conv2_channels</span></code>, <code class="docutils literal notranslate"><span class="pre">hidden_dim</span></code>) sets the <strong>capacity</strong> of the model. More capacity can fit more complex patterns, but costs compute and overfits more easily.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">activation</span></code></strong> is the non-linearity. ReLU is the default workhorse; GELU and LeakyReLU are common alternatives; tanh saturates and usually trains more slowly in deep networks.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">use_batchnorm</span></code></strong> normalises activations within each batch. It tends to make training faster and much less sensitive to the learning rate.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">dropout</span></code></strong> randomly zeroes activations during training, which discourages the network from relying on any single feature. It is a regulariser: it lowers training accuracy on purpose in exchange for better generalisation.</p></li>
+</ul>
+<p>Depth (the number of layers) is also a hyperparameter. It is fixed at two conv blocks here to keep the notebook short; see the exercises at the end.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ACTIVATIONS</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"relu"</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">,</span> <span class="s2">"leaky_relu"</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">LeakyReLU</span><span class="p">,</span> <span class="s2">"gelu"</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">GELU</span><span class="p">,</span> <span class="s2">"tanh"</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Tanh</span><span class="p">}</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">SmallCNN</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hp</span><span class="p">:</span> <span class="n">HParams</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="n">act</span> <span class="o">=</span> <span class="n">ACTIVATIONS</span><span class="p">[</span><span class="n">hp</span><span class="o">.</span><span class="n">activation</span><span class="p">]</span>            <span class="c1"># &lt;-- hyperparameter: activation</span>
+        <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span> <span class="o">=</span> <span class="n">hp</span><span class="o">.</span><span class="n">conv1_channels</span><span class="p">,</span> <span class="n">hp</span><span class="o">.</span><span class="n">conv2_channels</span>  <span class="c1"># &lt;-- hyperparameters: width</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">conv_block</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">):</span>
+            <span class="n">layers</span> <span class="o">=</span> <span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Conv2d</span><span class="p">(</span><span class="n">in_ch</span><span class="p">,</span> <span class="n">out_ch</span><span class="p">,</span> <span class="n">kernel_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">padding</span><span class="o">=</span><span class="mi">1</span><span class="p">)]</span>
+            <span class="k">if</span> <span class="n">hp</span><span class="o">.</span><span class="n">use_batchnorm</span><span class="p">:</span>                    <span class="c1"># &lt;-- hyperparameter: use_batchnorm</span>
+                <span class="n">layers</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">BatchNorm2d</span><span class="p">(</span><span class="n">out_ch</span><span class="p">))</span>
+            <span class="n">layers</span> <span class="o">+=</span> <span class="p">[</span><span class="n">act</span><span class="p">(),</span> <span class="n">nn</span><span class="o">.</span><span class="n">MaxPool2d</span><span class="p">(</span><span class="mi">2</span><span class="p">)]</span>
+            <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="o">*</span><span class="n">layers</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">features</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span><span class="n">conv_block</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">c1</span><span class="p">),</span> <span class="n">conv_block</span><span class="p">(</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Flatten</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">dropout</span><span class="p">),</span>                 <span class="c1"># &lt;-- hyperparameter: dropout</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">c2</span> <span class="o">*</span> <span class="mi">7</span> <span class="o">*</span> <span class="mi">7</span><span class="p">,</span> <span class="n">hp</span><span class="o">.</span><span class="n">hidden_dim</span><span class="p">),</span>   <span class="c1"># &lt;-- hyperparameter: hidden_dim</span>
+            <span class="n">act</span><span class="p">(),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">dropout</span><span class="p">),</span>
+            <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">num_classes</span><span class="p">),</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">classifier</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">features</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">count_parameters</span><span class="p">(</span><span class="n">model</span><span class="p">:</span> <span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span> <span class="k">if</span> <span class="n">p</span><span class="o">.</span><span class="n">requires_grad</span><span class="p">)</span>
+
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">SmallCNN</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">model</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">trainable parameters: </span><span class="si">{</span><span class="n">count_parameters</span><span class="p">(</span><span class="n">model</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>SmallCNN(
+  (features): Sequential(
+    (0): Sequential(
+      (0): Conv2d(1, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(32, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)
+      (2): ReLU()
+      (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    )
+    (1): Sequential(
+      (0): Conv2d(32, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): BatchNorm2d(64, eps=1e-05, momentum=0.1, affine=True, bias=True, track_running_stats=True)
+      (2): ReLU()
+      (3): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    )
+  )
+  (classifier): Sequential(
+    (0): Flatten(start_dim=1, end_dim=-1)
+    (1): Dropout(p=0.25, inplace=False)
+    (2): Linear(in_features=3136, out_features=128, bias=True)
+    (3): ReLU()
+    (4): Dropout(p=0.25, inplace=False)
+    (5): Linear(in_features=128, out_features=10, bias=True)
+  )
+)
+
+trainable parameters: 421,834
+</pre></div>
+</div>
+</div>
+</div>
+<p>Architecture hyperparameters change the <strong>number of parameters</strong>, and you can see that without training anything:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">variants</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"tiny   (8, 16, 32)"</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">conv1_channels</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">conv2_channels</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="o">=</span><span class="mi">32</span><span class="p">),</span>
+    <span class="s2">"small  (16, 32, 64)"</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">conv1_channels</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">conv2_channels</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="o">=</span><span class="mi">64</span><span class="p">),</span>
+    <span class="s2">"default (32, 64, 128)"</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(),</span>
+    <span class="s2">"wide   (64, 128, 256)"</span><span class="p">:</span> <span class="nb">dict</span><span class="p">(</span><span class="n">conv1_channels</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">conv2_channels</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="o">=</span><span class="mi">256</span><span class="p">),</span>
+<span class="p">}</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span><span class="s2">"trainable parameters"</span><span class="p">:</span> <span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="n">count_parameters</span><span class="p">(</span><span class="n">SmallCNN</span><span class="p">(</span><span class="n">replace</span><span class="p">(</span><span class="n">hp</span><span class="p">,</span> <span class="o">**</span><span class="n">overrides</span><span class="p">)))</span>
+                              <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">overrides</span> <span class="ow">in</span> <span class="n">variants</span><span class="o">.</span><span class="n">items</span><span class="p">()}}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+  <div id="df-acade33a-6927-49eb-9a3f-ca377af5b753" class="colab-df-container">
+    <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>trainable parameters</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>tiny   (8, 16, 32)</th>
+      <td>26746</td>
+    </tr>
+    <tr>
+      <th>small  (16, 32, 64)</th>
+      <td>105962</td>
+    </tr>
+    <tr>
+      <th>default (32, 64, 128)</th>
+      <td>421834</td>
+    </tr>
+    <tr>
+      <th>wide   (64, 128, 256)</th>
+      <td>1683338</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-acade33a-6927-49eb-9a3f-ca377af5b753')"
+            title="Convert this dataframe to an interactive table."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-acade33a-6927-49eb-9a3f-ca377af5b753 button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-acade33a-6927-49eb-9a3f-ca377af5b753');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+    </div>
+  </div>
+</div></div>
+</div>
+</section>
+<section id="training-logic-the-lightningmodule">
+<h2>4. Training logic: the <code class="docutils literal notranslate"><span class="pre">LightningModule</span></code><a class="headerlink" href="#training-logic-the-lightningmodule" title="Link to this heading">#</a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">LightningModule</span></code> wraps the network and answers three questions:</p>
+<ol class="arabic simple">
+<li><p><strong>What is one training step?</strong> → <code class="docutils literal notranslate"><span class="pre">training_step</span></code></p></li>
+<li><p><strong>How do we evaluate?</strong> → <code class="docutils literal notranslate"><span class="pre">validation_step</span></code>, <code class="docutils literal notranslate"><span class="pre">test_step</span></code></p></li>
+<li><p><strong>How do the weights get updated?</strong> → <code class="docutils literal notranslate"><span class="pre">configure_optimizers</span></code></p></li>
+</ol>
+<p><code class="docutils literal notranslate"><span class="pre">configure_optimizers</span></code> is where the <strong>optimisation hyperparameters</strong> live.</p>
+<section id="learning-rate">
+<h3>Learning rate<a class="headerlink" href="#learning-rate" title="Link to this heading">#</a></h3>
+<p>Plain gradient descent updates the weights <span class="math notranslate nohighlight">\(\theta\)</span> with</p>
+<div class="math notranslate nohighlight">
+\[\theta \leftarrow \theta - \eta \,\nabla_\theta \mathcal{L}(\theta)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\eta\)</span> is the <strong>learning rate</strong>. It is usually the most important hyperparameter:</p>
+<ul class="simple">
+<li><p><strong>too small</strong> → training crawls and may stop far from a good solution within your epoch budget</p></li>
+<li><p><strong>too large</strong> → the loss oscillates or blows up</p></li>
+<li><p><strong>about right</strong> → the loss drops quickly and settles</p></li>
+</ul>
+</section>
+<section id="optimizer">
+<h3>Optimizer<a class="headerlink" href="#optimizer" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>SGD</strong> uses the raw gradient. With <strong><code class="docutils literal notranslate"><span class="pre">momentum</span></code></strong> it keeps a running average of past gradients, which smooths the path and speeds things up along consistent directions.</p></li>
+<li><p><strong>Adam</strong> adapts the step size per parameter. It usually works well out of the box with <code class="docutils literal notranslate"><span class="pre">lr</span> <span class="pre">≈</span> <span class="pre">1e-3</span></code>.</p></li>
+<li><p><strong>AdamW</strong> is Adam with weight decay applied correctly (decoupled from the adaptive step). Prefer it over Adam whenever <code class="docutils literal notranslate"><span class="pre">weight_decay</span> <span class="pre">&gt;</span> <span class="pre">0</span></code>.</p></li>
+</ul>
+<p>Good learning rates are <strong>not transferable between optimizers</strong>: <code class="docutils literal notranslate"><span class="pre">0.1</span></code> can be fine for SGD and disastrous for Adam.</p>
+</section>
+<section id="weight-decay">
+<h3>Weight decay<a class="headerlink" href="#weight-decay" title="Link to this heading">#</a></h3>
+<p>Shrinks the weights a little at every step, which is equivalent in spirit to adding <span class="math notranslate nohighlight">\(\lambda \lVert\theta\rVert^2\)</span> to the loss. It pushes the model towards simpler solutions (regularisation).</p>
+</section>
+<section id="learning-rate-scheduler">
+<h3>Learning-rate scheduler<a class="headerlink" href="#learning-rate-scheduler" title="Link to this heading">#</a></h3>
+<p>Changes <span class="math notranslate nohighlight">\(\eta\)</span> during training. A common pattern is to start with larger steps to make fast progress and finish with smaller steps to settle. <code class="docutils literal notranslate"><span class="pre">step</span></code> divides the rate by 10 at fixed intervals; <code class="docutils literal notranslate"><span class="pre">cosine</span></code> lowers it smoothly to zero.</p>
+<p>The call to <code class="docutils literal notranslate"><span class="pre">save_hyperparameters</span></code> stores the config in <code class="docutils literal notranslate"><span class="pre">self.hparams</span></code>, in the logger output (<code class="docutils literal notranslate"><span class="pre">hparams.yaml</span></code>) and inside every checkpoint.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">LitClassifier</span><span class="p">(</span><span class="n">L</span><span class="o">.</span><span class="n">LightningModule</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">hp</span><span class="p">:</span> <span class="n">HParams</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hp</span> <span class="o">=</span> <span class="n">hp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_hyperparameters</span><span class="p">(</span><span class="n">asdict</span><span class="p">(</span><span class="n">hp</span><span class="p">))</span>  <span class="c1"># logged + stored in checkpoints</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">SmallCNN</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">CrossEntropyLoss</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_shared_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">stage</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">batch</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loss_fn</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+        <span class="n">acc</span> <span class="o">=</span> <span class="p">(</span><span class="n">logits</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">float</span><span class="p">()</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+        <span class="c1"># on_epoch=True: Lightning averages over the epoch (weighted by batch size).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">stage</span><span class="si">}</span><span class="s2">_loss"</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">on_step</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">on_epoch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">prog_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">stage</span><span class="si">}</span><span class="s2">_acc"</span><span class="p">,</span> <span class="n">acc</span><span class="p">,</span> <span class="n">on_step</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">on_epoch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">prog_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">loss</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">training_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shared_step</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="s2">"train"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">validation_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shared_step</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="s2">"val"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_shared_step</span><span class="p">(</span><span class="n">batch</span><span class="p">,</span> <span class="s2">"test"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">hp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hp</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">()</span>
+
+        <span class="c1"># &lt;-- hyperparameters: optimizer, lr, momentum, weight_decay</span>
+        <span class="k">if</span> <span class="n">hp</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">==</span> <span class="s2">"sgd"</span><span class="p">:</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">SGD</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">lr</span><span class="p">,</span> <span class="n">momentum</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">momentum</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">weight_decay</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">hp</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">==</span> <span class="s2">"adam"</span><span class="p">:</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">lr</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">weight_decay</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">hp</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">==</span> <span class="s2">"adamw"</span><span class="p">:</span>
+            <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">params</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">lr</span><span class="p">,</span> <span class="n">weight_decay</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">weight_decay</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown optimizer: </span><span class="si">{</span><span class="n">hp</span><span class="o">.</span><span class="n">optimizer</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+        <span class="c1"># &lt;-- hyperparameter: scheduler</span>
+        <span class="k">if</span> <span class="n">hp</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">==</span> <span class="s2">"none"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">optimizer</span>
+        <span class="k">if</span> <span class="n">hp</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">==</span> <span class="s2">"step"</span><span class="p">:</span>
+            <span class="n">scheduler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">StepLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">step_size</span><span class="o">=</span><span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">hp</span><span class="o">.</span><span class="n">max_epochs</span> <span class="o">//</span> <span class="mi">3</span><span class="p">),</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">hp</span><span class="o">.</span><span class="n">scheduler</span> <span class="o">==</span> <span class="s2">"cosine"</span><span class="p">:</span>
+            <span class="n">scheduler</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">lr_scheduler</span><span class="o">.</span><span class="n">CosineAnnealingLR</span><span class="p">(</span><span class="n">optimizer</span><span class="p">,</span> <span class="n">T_max</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unknown scheduler: </span><span class="si">{</span><span class="n">hp</span><span class="o">.</span><span class="n">scheduler</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">"optimizer"</span><span class="p">:</span> <span class="n">optimizer</span><span class="p">,</span> <span class="s2">"lr_scheduler"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"scheduler"</span><span class="p">:</span> <span class="n">scheduler</span><span class="p">,</span> <span class="s2">"interval"</span><span class="p">:</span> <span class="s2">"epoch"</span><span class="p">}}</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="the-training-loop-trainer-hyperparameters">
+<h2>5. The training loop: <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> hyperparameters<a class="headerlink" href="#the-training-loop-trainer-hyperparameters" title="Link to this heading">#</a></h2>
+<p>Lightning’s <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> replaces the hand-written loop (<code class="docutils literal notranslate"><span class="pre">for</span> <span class="pre">epoch</span> <span class="pre">...</span> <span class="pre">for</span> <span class="pre">batch</span> <span class="pre">...</span> <span class="pre">loss.backward()</span> <span class="pre">...</span></code>). The hyperparameters that belong to the loop itself are:</p>
+<ul class="simple">
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">max_epochs</span></code></strong> — one epoch is one full pass over the training set. Too few and the model <strong>underfits</strong>; too many and it may <strong>overfit</strong> (and you waste compute).</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">patience</span></code></strong> (early stopping) — stop when <code class="docutils literal notranslate"><span class="pre">val_loss</span></code> has not improved for this many epochs. This turns “how many epochs?” from a guess into something the validation set decides. <code class="docutils literal notranslate"><span class="pre">max_epochs</span></code> then acts as an upper limit.</p></li>
+<li><p><strong><code class="docutils literal notranslate"><span class="pre">seed</span></code></strong> — fixes the random weight initialisation, the data split and the shuffling order. Two runs with different seeds give slightly different results, so small differences between hyperparameter settings may just be noise.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">fit()</span></code> helper below is the whole “framework”: config in, trained model and learning curves out. Everything after this section is just calling it with different configs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">load_history</span><span class="p">(</span><span class="n">log_dir</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Read Lightning's metrics.csv and return one row per epoch."""</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">Path</span><span class="p">(</span><span class="n">log_dir</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"metrics.csv"</span><span class="p">)</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">c</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"train_loss"</span><span class="p">,</span> <span class="s2">"val_loss"</span><span class="p">,</span> <span class="s2">"train_acc"</span><span class="p">,</span> <span class="s2">"val_acc"</span><span class="p">]</span> <span class="k">if</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"epoch"</span><span class="p">)[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fit</span><span class="p">(</span><span class="n">hp</span><span class="p">:</span> <span class="n">HParams</span><span class="p">,</span> <span class="n">run_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"run"</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">checkpoint</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Train one model from a config. Returns (trainer, model, datamodule, history)."""</span>
+    <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="n">_LIGHTNING_LOGGER</span><span class="p">,</span> <span class="s2">"lightning.fabric"</span><span class="p">,</span> <span class="s2">"lightning_fabric"</span><span class="p">):</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">INFO</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="n">logging</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+    <span class="n">L</span><span class="o">.</span><span class="n">seed_everything</span><span class="p">(</span><span class="n">hp</span><span class="o">.</span><span class="n">seed</span><span class="p">,</span> <span class="n">workers</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>  <span class="c1"># &lt;-- hyperparameter: seed</span>
+
+    <span class="n">datamodule</span> <span class="o">=</span> <span class="n">FashionMNISTDataModule</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">LitClassifier</span><span class="p">(</span><span class="n">hp</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">CSVLogger</span><span class="p">(</span><span class="s2">"logs"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="n">run_name</span><span class="p">)</span>
+
+    <span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="n">EarlyStopping</span><span class="p">(</span><span class="n">monitor</span><span class="o">=</span><span class="s2">"val_loss"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"min"</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">patience</span><span class="p">)]</span>  <span class="c1"># &lt;-- hyperparameter: patience</span>
+    <span class="k">if</span> <span class="n">checkpoint</span><span class="p">:</span>
+        <span class="n">callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ModelCheckpoint</span><span class="p">(</span><span class="n">monitor</span><span class="o">=</span><span class="s2">"val_acc"</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">"max"</span><span class="p">,</span> <span class="n">save_top_k</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+
+    <span class="n">trainer</span> <span class="o">=</span> <span class="n">L</span><span class="o">.</span><span class="n">Trainer</span><span class="p">(</span>
+        <span class="n">max_epochs</span><span class="o">=</span><span class="n">hp</span><span class="o">.</span><span class="n">max_epochs</span><span class="p">,</span>          <span class="c1"># &lt;-- hyperparameter: max_epochs</span>
+        <span class="n">accelerator</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span>                <span class="c1"># GPU if there is one, otherwise CPU</span>
+        <span class="n">devices</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+        <span class="n">callbacks</span><span class="o">=</span><span class="n">callbacks</span><span class="p">,</span>
+        <span class="n">enable_checkpointing</span><span class="o">=</span><span class="n">checkpoint</span><span class="p">,</span>
+        <span class="n">enable_progress_bar</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">enable_model_summary</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+        <span class="n">log_every_n_steps</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">trainer</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">datamodule</span><span class="o">=</span><span class="n">datamodule</span><span class="p">)</span>
+    <span class="n">history</span> <span class="o">=</span> <span class="n">load_history</span><span class="p">(</span><span class="n">logger</span><span class="o">.</span><span class="n">log_dir</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">datamodule</span><span class="p">,</span> <span class="n">history</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="baseline-run">
+<h3>Baseline run<a class="headerlink" href="#baseline-run" title="Link to this heading">#</a></h3>
+<p>Start with the defaults. A baseline matters: every later experiment is only meaningful as “better or worse than the baseline”.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">baseline_hp</span> <span class="o">=</span> <span class="n">HParams</span><span class="p">()</span>
+<span class="n">trainer</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">dm</span><span class="p">,</span> <span class="n">baseline_history</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">baseline_hp</span><span class="p">,</span> <span class="n">run_name</span><span class="o">=</span><span class="s2">"baseline"</span><span class="p">)</span>
+<span class="n">baseline_history</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: Seed set to 42
+INFO:lightning.fabric.utilities.seed:Seed set to 42
+INFO: GPU available: True (cuda), used: True
+INFO:lightning.pytorch.utilities.rank_zero:GPU available: True (cuda), used: True
+INFO: TPU available: False, using: 0 TPU cores
+INFO:lightning.pytorch.utilities.rank_zero:TPU available: False, using: 0 TPU cores
+INFO: 💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+INFO:lightning.pytorch.utilities.rank_zero:💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+INFO: LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+INFO:lightning.pytorch.accelerators.cuda:LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+</pre></div>
+</div>
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">┏━━━┳━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━┳━━━━━━━┳━━━━━━━┓
+┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold">   </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Name    </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Type             </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Params </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> Mode  </span>┃<span style="color: #800080; text-decoration-color: #800080; font-weight: bold"> FLOPs </span>┃
+┡━━━╇━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━╇━━━━━━━╇━━━━━━━┩
+│<span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> 0 </span>│ model   │ SmallCNN         │  421 K │ train │     0 │
+│<span style="color: #7f7f7f; text-decoration-color: #7f7f7f"> 1 </span>│ loss_fn │ CrossEntropyLoss │      0 │ train │     0 │
+└───┴─────────┴──────────────────┴────────┴───────┴───────┘
+</pre>
+</div><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"><span style="font-weight: bold">Trainable params</span>: 421 K                                                                                            
+<span style="font-weight: bold">Non-trainable params</span>: 0                                                                                            
+<span style="font-weight: bold">Total params</span>: 421 K                                                                                                
+<span style="font-weight: bold">Total estimated model params size (MB)</span>: 1.687                                                                      
+<span style="font-weight: bold">Modules in train mode</span>: 20                                                                                          
+<span style="font-weight: bold">Modules in eval mode</span>: 0                                                                                            
+<span style="font-weight: bold">Total FLOPs</span>: 0                                                                                                     
+</pre>
+</div><script type="application/vnd.jupyter.widget-view+json">{"model_id": "e3b5d3fceb404e8a8e52caf4e6ed353b", "version_major": 2, "version_minor": 0}</script><div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace">/usr/local/lib/python3.13/dist-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)`
+is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+</pre>
+</div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>INFO: `Trainer.fit` stopped: `max_epochs=5` reached.
+INFO:lightning.pytorch.utilities.rank_zero:`Trainer.fit` stopped: `max_epochs=5` reached.
+</pre></div>
+</div>
+<div class="output text_html"><pre style="white-space:pre;overflow-x:auto;line-height:normal;font-family:Menlo,'DejaVu Sans Mono',consolas,'Courier New',monospace"></pre>
+</div><div class="output text_html">
+  <div id="df-5a1c157d-4f0f-4be4-89f8-46db10d01115" class="colab-df-container">
+    <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>epoch</th>
+      <th>train_loss</th>
+      <th>val_loss</th>
+      <th>train_acc</th>
+      <th>val_acc</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0.442606</td>
+      <td>0.303086</td>
+      <td>0.839963</td>
+      <td>0.886333</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>0.314130</td>
+      <td>0.272184</td>
+      <td>0.885518</td>
+      <td>0.898667</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>0.271134</td>
+      <td>0.257511</td>
+      <td>0.898778</td>
+      <td>0.908667</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>0.249597</td>
+      <td>0.258150</td>
+      <td>0.909500</td>
+      <td>0.904000</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>0.233350</td>
+      <td>0.250200</td>
+      <td>0.914278</td>
+      <td>0.909167</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-5a1c157d-4f0f-4be4-89f8-46db10d01115')"
+            title="Convert this dataframe to an interactive table."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-5a1c157d-4f0f-4be4-89f8-46db10d01115 button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-5a1c157d-4f0f-4be4-89f8-46db10d01115');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+  <div id="id_08a7b824-ac70-4eba-9279-21992f5dc240">
+    <style>
+      .colab-df-generate {
+        background-color: #E8F0FE;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        display: none;
+        fill: #1967D2;
+        height: 32px;
+        padding: 0 0 0 0;
+        width: 32px;
+      }
+
+      .colab-df-generate:hover {
+        background-color: #E2EBFA;
+        box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+        fill: #174EA6;
+      }
+
+      [theme=dark] .colab-df-generate {
+        background-color: #3B4455;
+        fill: #D2E3FC;
+      }
+
+      [theme=dark] .colab-df-generate:hover {
+        background-color: #434B5C;
+        box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+        filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+        fill: #FFFFFF;
+      }
+    </style>
+    <button class="colab-df-generate" onclick="generateWithVariable('baseline_history')"
+            title="Generate code using this dataframe."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px"viewBox="0 0 24 24"
+       width="24px">
+    <path d="M7,19H8.4L18.45,9,17,7.55,7,17.6ZM5,21V16.75L18.45,3.32a2,2,0,0,1,2.83,0l1.4,1.43a1.91,1.91,0,0,1,.58,1.4,1.91,1.91,0,0,1-.58,1.4L9.25,21ZM18.45,9,17,7.55Zm-12,3A5.31,5.31,0,0,0,4.9,8.1,5.31,5.31,0,0,0,1,6.5,5.31,5.31,0,0,0,4.9,4.9,5.31,5.31,0,0,0,6.5,1,5.31,5.31,0,0,0,8.1,4.9,5.31,5.31,0,0,0,12,6.5,5.46,5.46,0,0,0,6.5,12Z"/>
+  </svg>
+    </button>
+    <script>
+      (() => {
+      const buttonEl =
+        document.querySelector('#id_08a7b824-ac70-4eba-9279-21992f5dc240 button.colab-df-generate');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      buttonEl.onclick = () => {
+        google.colab.notebook.generateWithVariable('baseline_history');
+      }
+      })();
+    </script>
+  </div>
+
+    </div>
+  </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_history</span><span class="p">(</span><span class="n">history</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="p">(</span><span class="n">ax_loss</span><span class="p">,</span> <span class="n">ax_acc</span><span class="p">)</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">))</span>
+    <span class="n">ax_loss</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="s2">"epoch"</span><span class="p">],</span> <span class="n">history</span><span class="p">[</span><span class="s2">"train_loss"</span><span class="p">],</span> <span class="s2">"o--"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"train"</span><span class="p">)</span>
+    <span class="n">ax_loss</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="s2">"epoch"</span><span class="p">],</span> <span class="n">history</span><span class="p">[</span><span class="s2">"val_loss"</span><span class="p">],</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"validation"</span><span class="p">)</span>
+    <span class="n">ax_loss</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"epoch"</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">"loss"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Loss"</span><span class="p">)</span>
+    <span class="n">ax_acc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="s2">"epoch"</span><span class="p">],</span> <span class="n">history</span><span class="p">[</span><span class="s2">"train_acc"</span><span class="p">],</span> <span class="s2">"o--"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"train"</span><span class="p">)</span>
+    <span class="n">ax_acc</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">history</span><span class="p">[</span><span class="s2">"epoch"</span><span class="p">],</span> <span class="n">history</span><span class="p">[</span><span class="s2">"val_acc"</span><span class="p">],</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"validation"</span><span class="p">)</span>
+    <span class="n">ax_acc</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"epoch"</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="s2">"accuracy"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Accuracy"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="p">(</span><span class="n">ax_loss</span><span class="p">,</span> <span class="n">ax_acc</span><span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+
+<span class="n">plot_history</span><span class="p">(</span><span class="n">baseline_history</span><span class="p">,</span> <span class="s2">"Baseline"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/c3adaf1a122006adc4a6f23daacf09153b45bec986fe005db6abcfd07f8f154f.png" src="_images/c3adaf1a122006adc4a6f23daacf09153b45bec986fe005db6abcfd07f8f154f.png" />
+</div>
+</div>
+<p><strong>How to read learning curves</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>What you see</p></th>
+<th class="head"><p>Diagnosis</p></th>
+<th class="head"><p>Hyperparameters to try</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Train and validation loss both high and still falling</p></td>
+<td><p>Underfitting / not trained long enough</p></td>
+<td><p>More epochs, higher <code class="docutils literal notranslate"><span class="pre">lr</span></code>, bigger model</p></td>
+</tr>
+<tr class="row-odd"><td><p>Train loss low, validation loss rising</p></td>
+<td><p>Overfitting</p></td>
+<td><p>More <code class="docutils literal notranslate"><span class="pre">dropout</span></code>, <code class="docutils literal notranslate"><span class="pre">weight_decay</span></code>, <code class="docutils literal notranslate"><span class="pre">augment</span></code>, smaller model, early stopping</p></td>
+</tr>
+<tr class="row-even"><td><p>Loss jumps around or becomes <code class="docutils literal notranslate"><span class="pre">nan</span></code></p></td>
+<td><p>Step size too large</p></td>
+<td><p>Lower <code class="docutils literal notranslate"><span class="pre">lr</span></code>, add batch norm</p></td>
+</tr>
+<tr class="row-odd"><td><p>Loss barely moves from the start</p></td>
+<td><p>Step size too small (or far too large)</p></td>
+<td><p>Raise <code class="docutils literal notranslate"><span class="pre">lr</span></code> by 10× and look again</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>One detail in this notebook: the training metrics are averaged <em>during</em> the epoch, with dropout switched on, while validation runs <em>after</em> the epoch with dropout off. So training accuracy can sit a little <strong>below</strong> validation accuracy early on. That is expected, not a bug.</p>
+</section>
+</section>
+<section id="experiments-change-one-thing-at-a-time">
+<h2>6. Experiments: change one thing at a time<a class="headerlink" href="#experiments-change-one-thing-at-a-time" title="Link to this heading">#</a></h2>
+<p>To see the effect of one hyperparameter, hold everything else fixed and vary only that one. To keep each run to seconds rather than minutes, the experiments use a <strong>fast config</strong>: 10,000 training images and 4 epochs, with early stopping effectively switched off so every run has the same length.</p>
+<p>This is a <strong>proxy</strong>: cheap, and good for seeing <em>trends</em>. The best value on a small proxy is not guaranteed to be the best value on the full dataset.</p>
+<p><code class="docutils literal notranslate"><span class="pre">run_configs</span></code> trains one model per entry and collects the learning curves.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">FAST</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">HParams</span><span class="p">(),</span> <span class="n">train_subset</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">max_epochs</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">patience</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">run_configs</span><span class="p">(</span><span class="n">experiment</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">configs</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">base</span><span class="p">:</span> <span class="n">HParams</span> <span class="o">=</span> <span class="n">FAST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Train one model per entry of `configs` ({label: {field: value}})."""</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">overrides</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">configs</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+        <span class="n">hp_i</span> <span class="o">=</span> <span class="n">replace</span><span class="p">(</span><span class="n">base</span><span class="p">,</span> <span class="o">**</span><span class="n">overrides</span><span class="p">)</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">history</span> <span class="o">=</span> <span class="n">fit</span><span class="p">(</span><span class="n">hp_i</span><span class="p">,</span> <span class="n">run_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">experiment</span><span class="si">}</span><span class="s2">/run_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="n">seconds</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">label</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"hp"</span><span class="p">:</span> <span class="n">hp_i</span><span class="p">,</span> <span class="s2">"history"</span><span class="p">:</span> <span class="n">history</span><span class="p">,</span> <span class="s2">"seconds"</span><span class="p">:</span> <span class="n">seconds</span><span class="p">}</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">:</span><span class="s2">&lt;28</span><span class="si">}</span><span class="s2"> best val_acc = </span><span class="si">{</span><span class="n">history</span><span class="p">[</span><span class="s1">'val_acc'</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">   (</span><span class="si">{</span><span class="n">seconds</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">s)"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">summarize</span><span class="p">(</span><span class="n">results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="n">r</span><span class="p">[</span><span class="s2">"history"</span><span class="p">]</span>
+        <span class="n">rows</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">"run"</span><span class="p">:</span> <span class="n">label</span><span class="p">,</span>
+            <span class="s2">"best_val_acc"</span><span class="p">:</span> <span class="n">h</span><span class="p">[</span><span class="s2">"val_acc"</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span>
+            <span class="s2">"final_val_loss"</span><span class="p">:</span> <span class="n">h</span><span class="p">[</span><span class="s2">"val_loss"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s2">"final_train_loss"</span><span class="p">:</span> <span class="n">h</span><span class="p">[</span><span class="s2">"train_loss"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="s2">"epochs"</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">h</span><span class="p">),</span>
+            <span class="s2">"seconds"</span><span class="p">:</span> <span class="nb">round</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"seconds"</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="p">})</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"run"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_runs</span><span class="p">(</span><span class="n">results</span><span class="p">:</span> <span class="nb">dict</span><span class="p">,</span> <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">""</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="p">(</span><span class="s2">"val_loss"</span><span class="p">,</span> <span class="s2">"val_acc"</span><span class="p">)):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">),</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">5.5</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">metrics</span><span class="p">),</span> <span class="mf">3.8</span><span class="p">))</span>
+    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">metric</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axes</span><span class="p">,</span> <span class="n">metrics</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="s2">"history"</span><span class="p">][</span><span class="s2">"epoch"</span><span class="p">],</span> <span class="n">r</span><span class="p">[</span><span class="s2">"history"</span><span class="p">][</span><span class="n">metric</span><span class="p">],</span> <span class="s2">"o-"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">"epoch"</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">metric</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="n">metric</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">axes</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+    <span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="id1">
+<h3>6.1 Learning rate<a class="headerlink" href="#id1" title="Link to this heading">#</a></h3>
+<p>Learning rates are searched on a <strong>logarithmic scale</strong>: the difference between <code class="docutils literal notranslate"><span class="pre">0.001</span></code> and <code class="docutils literal notranslate"><span class="pre">0.01</span></code> matters far more than the difference between <code class="docutils literal notranslate"><span class="pre">0.051</span></code> and <code class="docutils literal notranslate"><span class="pre">0.060</span></code>. So try powers of ten first, then refine around the best one.</p>
+<p><strong>What to look for:</strong> the smallest rate learns slowly and is still improving when training ends; the largest is unstable or stuck near chance (10% accuracy, loss ≈ 2.3); the best one sits in between.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lr_values_narrow</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3e-4</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">3e-3</span><span class="p">]</span>
+<span class="n">lr_narrow_results</span> <span class="o">=</span> <span class="n">run_configs</span><span class="p">(</span><span class="s2">"lr_narrow"</span><span class="p">,</span> <span class="p">{</span><span class="sa">f</span><span class="s2">"lr=</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lr"</span><span class="p">:</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">lr_values_narrow</span><span class="p">})</span>
+<span class="n">plot_runs</span><span class="p">(</span><span class="n">lr_narrow_results</span><span class="p">,</span> <span class="s2">"Effect of the learning rate (Adam), narrow range"</span><span class="p">)</span>
+<span class="n">summarize</span><span class="p">(</span><span class="n">lr_narrow_results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.13/dist-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lr=0.0003                    best val_acc = 0.8710   (16s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.13/dist-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lr=0.001                     best val_acc = 0.8758   (17s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.13/dist-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lr=0.003                     best val_acc = 0.8775   (16s)
+</pre></div>
+</div>
+<img alt="_images/b57ed2ef9f96cb175519f850c49bfa878c58c61c7161e522756403fedcba242a.png" src="_images/b57ed2ef9f96cb175519f850c49bfa878c58c61c7161e522756403fedcba242a.png" />
+<div class="output text_html">
+  <div id="df-cffe2c8e-5e02-48ab-a41e-5f526caea659" class="colab-df-container">
+    <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>best_val_acc</th>
+      <th>final_val_loss</th>
+      <th>final_train_loss</th>
+      <th>epochs</th>
+      <th>seconds</th>
+    </tr>
+    <tr>
+      <th>run</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>lr=0.0003</th>
+      <td>0.871000</td>
+      <td>0.352318</td>
+      <td>0.344188</td>
+      <td>4</td>
+      <td>16.4</td>
+    </tr>
+    <tr>
+      <th>lr=0.001</th>
+      <td>0.875833</td>
+      <td>0.347502</td>
+      <td>0.329566</td>
+      <td>4</td>
+      <td>16.8</td>
+    </tr>
+    <tr>
+      <th>lr=0.003</th>
+      <td>0.877500</td>
+      <td>0.355785</td>
+      <td>0.368597</td>
+      <td>4</td>
+      <td>16.5</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-cffe2c8e-5e02-48ab-a41e-5f526caea659')"
+            title="Convert this dataframe to an interactive table."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-cffe2c8e-5e02-48ab-a41e-5f526caea659 button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-cffe2c8e-5e02-48ab-a41e-5f526caea659');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+    </div>
+  </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lr_values</span> <span class="o">=</span> <span class="p">[</span><span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1e-4</span><span class="p">,</span> <span class="mf">1e-3</span><span class="p">,</span> <span class="mf">1e-2</span><span class="p">,</span> <span class="mf">1e-1</span><span class="p">]</span>
+<span class="n">lr_wide_results</span> <span class="o">=</span> <span class="n">run_configs</span><span class="p">(</span><span class="s2">"lr_wide"</span><span class="p">,</span> <span class="p">{</span><span class="sa">f</span><span class="s2">"lr=</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"lr"</span><span class="p">:</span> <span class="n">v</span><span class="p">}</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">lr_values</span><span class="p">})</span>
+<span class="n">plot_runs</span><span class="p">(</span><span class="n">lr_wide_results</span><span class="p">,</span> <span class="s2">"Effect of the learning rate (Adam), wide range"</span><span class="p">)</span>
+<span class="n">summarize</span><span class="p">(</span><span class="n">lr_wide_results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.13/dist-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lr=1e-05                     best val_acc = 0.7747   (16s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.13/dist-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lr=0.0001                    best val_acc = 0.8573   (17s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.13/dist-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lr=0.001                     best val_acc = 0.8727   (16s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.13/dist-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lr=0.01                      best val_acc = 0.8553   (16s)
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/usr/local/lib/python3.13/dist-packages/lightning/pytorch/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>lr=0.1                       best val_acc = 0.1078   (18s)
+</pre></div>
+</div>
+<img alt="_images/84cde57d1de6c301e71f21f52bc33e476ca6e576b840e9ca8d39d38a5d37622d.png" src="_images/84cde57d1de6c301e71f21f52bc33e476ca6e576b840e9ca8d39d38a5d37622d.png" />
+<div class="output text_html">
+  <div id="df-c92085d4-3655-4ee9-bada-a9e88825905a" class="colab-df-container">
+    <div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>best_val_acc</th>
+      <th>final_val_loss</th>
+      <th>final_train_loss</th>
+      <th>epochs</th>
+      <th>seconds</th>
+    </tr>
+    <tr>
+      <th>run</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>lr=1e-05</th>
+      <td>0.774667</td>
+      <td>0.706460</td>
+      <td>0.824246</td>
+      <td>4</td>
+      <td>16.3</td>
+    </tr>
+    <tr>
+      <th>lr=0.0001</th>
+      <td>0.857333</td>
+      <td>0.393686</td>
+      <td>0.416505</td>
+      <td>4</td>
+      <td>16.9</td>
+    </tr>
+    <tr>
+      <th>lr=0.001</th>
+      <td>0.872667</td>
+      <td>0.349995</td>
+      <td>0.330636</td>
+      <td>4</td>
+      <td>16.4</td>
+    </tr>
+    <tr>
+      <th>lr=0.01</th>
+      <td>0.855333</td>
+      <td>0.410024</td>
+      <td>0.517154</td>
+      <td>4</td>
+      <td>16.2</td>
+    </tr>
+    <tr>
+      <th>lr=0.1</th>
+      <td>0.107833</td>
+      <td>2.315130</td>
+      <td>2.312536</td>
+      <td>4</td>
+      <td>17.6</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+    <div class="colab-df-buttons">
+
+  <div class="colab-df-container">
+    <button class="colab-df-convert" onclick="convertToInteractive('df-c92085d4-3655-4ee9-bada-a9e88825905a')"
+            title="Convert this dataframe to an interactive table."
+            style="display:none;">
+
+  <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960">
+    <path d="M120-120v-720h720v720H120Zm60-500h600v-160H180v160Zm220 220h160v-160H400v160Zm0 220h160v-160H400v160ZM180-400h160v-160H180v160Zm440 0h160v-160H620v160ZM180-180h160v-160H180v160Zm440 0h160v-160H620v160Z"/>
+  </svg>
+    </button>
+
+  <style>
+    .colab-df-container {
+      display:flex;
+      gap: 12px;
+    }
+
+    .colab-df-convert {
+      background-color: #E8F0FE;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+      fill: #1967D2;
+      height: 32px;
+      padding: 0 0 0 0;
+      width: 32px;
+    }
+
+    .colab-df-convert:hover {
+      background-color: #E2EBFA;
+      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);
+      fill: #174EA6;
+    }
+
+    .colab-df-buttons div {
+      margin-bottom: 4px;
+    }
+
+    [theme=dark] .colab-df-convert {
+      background-color: #3B4455;
+      fill: #D2E3FC;
+    }
+
+    [theme=dark] .colab-df-convert:hover {
+      background-color: #434B5C;
+      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));
+      fill: #FFFFFF;
+    }
+  </style>
+
+    <script>
+      const buttonEl =
+        document.querySelector('#df-c92085d4-3655-4ee9-bada-a9e88825905a button.colab-df-convert');
+      buttonEl.style.display =
+        google.colab.kernel.accessAllowed ? 'block' : 'none';
+
+      async function convertToInteractive(key) {
+        const element = document.querySelector('#df-c92085d4-3655-4ee9-bada-a9e88825905a');
+        const dataTable =
+          await google.colab.kernel.invokeFunction('convertToInteractive',
+                                                    [key], {});
+        if (!dataTable) return;
+
+        const docLinkHtml = 'Like what you see? Visit the ' +
+          '<a target="_blank" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'
+          + ' to learn more about interactive tables.';
+        element.innerHTML = '';
+        dataTable['output_type'] = 'display_data';
+        await google.colab.output.renderOutput(dataTable, element);
+        const docLink = document.createElement('div');
+        docLink.innerHTML = docLinkHtml;
+        element.appendChild(docLink);
+      }
+    </script>
+  </div>
+
+
+    </div>
+  </div>
+</div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The classic "U-shape" view: final validation loss against learning rate on a log axis.</span>
+<span class="n">final_losses</span> <span class="o">=</span> <span class="p">[</span><span class="n">lr_wide_results</span><span class="p">[</span><span class="sa">f</span><span class="s2">"lr=</span><span class="si">{</span><span class="n">v</span><span class="si">:</span><span class="s2">g</span><span class="si">}</span><span class="s2">"</span><span class="p">][</span><span class="s2">"history"</span><span class="p">][</span><span class="s2">"val_loss"</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">lr_values</span><span class="p">]</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">5.5</span><span class="p">,</span> <span class="mf">3.6</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">semilogx</span><span class="p">(</span><span class="n">lr_values</span><span class="p">,</span> <span class="n">final_losses</span><span class="p">,</span> <span class="s2">"o-"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s2">"learning rate (log scale)"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s2">"final validation loss"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Learning-rate sensitivity"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/b380fd2d1319edc054969472cae4cf99c2a6f46176879cb98af544f7c9d58116.png" src="_images/b380fd2d1319edc054969472cae4cf99c2a6f46176879cb98af544f7c9d58116.png" />
+</div>
+</div>
+</section>
+<section id="my-changes-in-6-1-what-i-changed-or-added">
+<h3>My changes in 6.1 (what I changed or added)<a class="headerlink" href="#my-changes-in-6-1-what-i-changed-or-added" title="Link to this heading">#</a></h3>
+<p><strong>Reused from the class notebook (unchanged):</strong> sections 0 to 5, the helper functions <code class="docutils literal notranslate"><span class="pre">FAST</span></code>, <code class="docutils literal notranslate"><span class="pre">run_configs</span></code>, <code class="docutils literal notranslate"><span class="pre">summarize</span></code> and <code class="docutils literal notranslate"><span class="pre">plot_runs</span></code>, and the log-scale learning-rate sensitivity plot.</p>
+<p><strong>What I changed or added:</strong></p>
+<ul class="simple">
+<li><p><strong>Added a narrow-range run</strong> (<code class="docutils literal notranslate"><span class="pre">lr_narrow_results</span></code>): lr = 3e-4, 1e-3, 3e-3, to zoom in around the default learning rate.</p></li>
+<li><p><strong>Kept the wide-range run</strong> (lr = 1e-5, 1e-4, 1e-3, 1e-2, 1e-1) from the class notebook, but renamed its results to <code class="docutils literal notranslate"><span class="pre">lr_wide_results</span></code> and its experiment name to <code class="docutils literal notranslate"><span class="pre">lr_wide</span></code> so both runs can be kept and compared.</p></li>
+<li><p><strong>Pointed the sensitivity plot at the wide run</strong> (<code class="docutils literal notranslate"><span class="pre">lr_results</span></code> became <code class="docutils literal notranslate"><span class="pre">lr_wide_results</span></code>).</p></li>
+<li><p><strong>Removed</strong> sections 6.2 to 9 (batch size, optimizer, regularisation, model capacity, random search, final test evaluation and summary), since my post is only about the learning rate.</p></li>
+</ul>
+<p><strong>Setup (identical for every run):</strong> Fashion-MNIST, small CNN (32 and 64 conv channels, batch norm, 128 hidden units, dropout 0.25), Adam, batch size 64, 4 epochs, seed 42, 10,000 training images (subset), 6,000 validation images. All comparisons use validation results only; the test set is not used.</p>
+<p><strong>Note:</strong> rerunning gives slightly different numbers (about 0.3 percentage points for the same setting), so small differences between runs are within noise.</p>
+<p>Base code: class notebook <code class="docutils literal notranslate"><span class="pre">hyperparameters_lightning.ipynb</span></code>.</p>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="learning_rate_post.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">&lt;no title&gt;</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="student_analysis.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Student Performance Analysis</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item"><div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">0. Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#all-hyperparameters-in-one-place">1. All hyperparameters in one place</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-fashion-mnist-in-a-lightningdatamodule">2. Data: Fashion-MNIST in a <code class="docutils literal notranslate"><span class="pre">LightningDataModule</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-architecture-hyperparameters">3. Model: architecture hyperparameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#training-logic-the-lightningmodule">4. Training logic: the <code class="docutils literal notranslate"><span class="pre">LightningModule</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-rate">Learning rate</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#optimizer">Optimizer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#weight-decay">Weight decay</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#learning-rate-scheduler">Learning-rate scheduler</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-training-loop-trainer-hyperparameters">5. The training loop: <code class="docutils literal notranslate"><span class="pre">Trainer</span></code> hyperparameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#baseline-run">Baseline run</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#experiments-change-one-thing-at-a-time">6. Experiments: change one thing at a time</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">6.1 Learning rate</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#my-changes-in-6-1-what-i-changed-or-added">My changes in 6.1 (what I changed or added)</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Marlou Apuya
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+<div class="extra_footer">
+  <p>© 2026 Marlou Apuya, Data Science Portfolio.</p>
+</div>
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
